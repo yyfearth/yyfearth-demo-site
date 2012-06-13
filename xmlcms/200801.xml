@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/month.xsl" type="text/xsl"?>
+<month year="2008" month="01"><day day="04"><post id="20080104232101"><title>千千静听皮肤编辑器 1.0 Alpha 发布</title><datetime year="2008" month="01" day="04" time="23:21:01"/><author>yyfearth</author><category>千千静听扩展包</category><tag>千千静听</tag><tag>TTPlus</tag><tag>扩展包</tag><tag>皮肤</tag><tag>编辑器</tag><summary><p>
+<img src="images/TTPSknEdt.png" alt="TTPSknEdt"/>
+</p>
+<div style="color:#FF0066">　　千千静听皮肤编辑器，广大千千静听皮肤制作爱好者的福音！</div>
+<div style="color:#3300CC">　　这个软件还是一个半成品，本不打算推出，但是我“广告”已经打出去很久，大家都说我不厚道，没办法个人精力有限，没有按时完成，所以现在就把这个半成品发布出来！</div>
+<div style="color:#FF0000">　　注意：因为这个版本还不成熟，可能随时崩溃（但是再次打开时有继续的提示），可能对说编辑的皮肤造成不可恢复的损坏，请大家及时备份皮肤，以免造成损失！否则后果自负。</div></summary></post></day></month>

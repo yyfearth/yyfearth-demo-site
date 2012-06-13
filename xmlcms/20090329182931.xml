@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/postview.xsl" type="text/xsl"?>
+<post id="20090329182931"><title>yyfearth.com 博客新版本制作中...</title><datetime year="2009" month="03" day="29" time="18:29:31"/><author>Wilson</author><category>网站项目</category><tag>网站</tag><tag>博客系统</tag><tag>Javascript</tag><tag>Ajax</tag><tag>jQuery</tag><summary><p><img src="images/y_we_blog.png" alt="y-we-blog"/></p>
+<p>系统名称：Y-We-blog</p>
+<p>　　新版本的博客系统正在制作中。<br/>
+　　完全使用Ajax技术，无刷新页面载入。<br/>
+　　目前大概完成不到30%，原本计划6月前完工，但是由于种种原因，系统将重写，因此可能短期内不能完成。</p></summary><content><p>　　看到了ww mplayer的主页的样式不错，经过其本人同意，就把它拔下来了。在他的样式的基础上全面修改了样式表，精简了很多东西，加上了自己的很多东西，就变成大家见到的博客的样子了。</p>
+<p>　　当然这个只是外表，我的新版本系统的核心才是要点，我充分运用了我这两个学期的研究成果——Ajax，来制作的。这个系统完全使用Ajax进行通信，后台可以使用asp.net或php（我都做了，但是这里php效果更好）和mysql数据库。而且我已经做到了整个网站无刷新，不过如果无刷新导致广告收益不理想，我可以改成又刷新的。</p>
+<p>　　整个系统现在完成了大概30%，看来还有很多事情要做啊。</p>
+<p>　　最开始的计划是在这个学期开始的1-2个月内完成，不过实际开发进度往往远慢于计划进度，到学期中后期也不见得能搞定。</p>
+<p>　　非常郁闷，测试新系统一次上线，我的服务器就挂，导致我不得不暂停一切计划，准备重写。</p>
+<p>　　学期结束前会有一次课程设计，打算借机完成这套系统，当作设计交上去。不过也可能写一个新系统。如果那样的话，这个系统只有搁置到暑期完成。
+</p></content></post>

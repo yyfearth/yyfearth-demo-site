@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/month.xsl" type="text/xsl"?>
+<month year="2009" month="09"><day day="09"><post id="20090909141436"><title>基于Xml+Xsl的CMS系统——XmlCMS</title><datetime year="2009" month="09" day="09" time="14:14:36"/><author>Wilson</author><category>网站项目</category><tag>网站</tag><tag>博客系统</tag><tag>Xml</tag><tag>Xsl</tag><tag>CMS</tag><tag>Weblog</tag><summary><p><img src="images/XmlCMS.jpg" alt="XmlCMS"/></p>
+<p>　　新做的一套基于Xml+Xsl的无数据库Lite方案的博客系统。<br/>
+　　我的课程设计项目。<br/>
+　　耗时3天，完成基本功能。<br/>
+　　之后的一个月里，每天花费了一点时间，基本上把系统的主要部分完成。<br/>
+　　在暑假忙绿的学习抽出的空闲里面，把网站的侧边栏搞定了。主要用JS完成的功能，而且在各个主流浏览器中都有很好的兼容性。同时也修正了很多的bug，目前版本到了1.0了。<br/>
+　　暂时不支持留言，考虑到服务器的压力和实时性问题，一时间没有找到合适的解决方案。本来还要有访问次数记录的，也是这个问题，打算以后解决。</p></summary></post></day></month>
