@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/month.xsl" type="text/xsl"?>
+<month year="2008" month="05"><day day="25"><post id="20080525150115"><title>Java视听同步幻灯片播放器</title><datetime year="2008" month="05" day="25" time="15:01:15"/><author>Wilson</author><category>编程学习</category><tag>Java</tag><tag>学习</tag><tag>播放器</tag><summary><p>
+<img src="images/JMp3PicPlayer.png" alt="JMp3PicPlayer"/>
+</p>
+<p>
+　　这是我学习一个学期Java（选修）的成果。<br/>
+　　本程序是一个多媒体播放器，可以播放主要用于播放Mp3文件，并且可以通过读取同文件名里面的歌词文件（.lrc）里面的内容，但本程序不是显示同步歌词的播放器，这个同步歌词是特制的，是按照标准lrc标签的格式记录了一些图片的路径，这样本程序就可以像播放同步歌词一样同步播放图片，达到与语音同步的幻灯片播放效果。<br/>
+　　本程序在JDK1.6环境下编写，并且运用了JMF及其Mp3播放插件，所以必须在安装有JDK1.6+JMF+Mp3 Plugin的系统上运行。<br/>
+　　本包中所带的样本文件是“清华大学出版社 C++语言程序设计（第三版）的第一章的音频教程和幻灯片，由本书主编郑莉老师主讲”。
+</p></summary></post></day></month>

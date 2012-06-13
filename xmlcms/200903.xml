@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/month.xsl" type="text/xsl"?>
+<month year="2009" month="03"><day day="29"><post id="20090329182931"><title>yyfearth.com 博客新版本制作中...</title><datetime year="2009" month="03" day="29" time="18:29:31"/><author>Wilson</author><category>网站项目</category><tag>网站</tag><tag>博客系统</tag><tag>Javascript</tag><tag>Ajax</tag><tag>jQuery</tag><summary><p><img src="images/y_we_blog.png" alt="y-we-blog"/></p>
+<p>系统名称：Y-We-blog</p>
+<p>　　新版本的博客系统正在制作中。<br/>
+　　完全使用Ajax技术，无刷新页面载入。<br/>
+　　目前大概完成不到30%，原本计划6月前完工，但是由于种种原因，系统将重写，因此可能短期内不能完成。</p></summary></post></day></month>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/postview.xsl" type="text/xsl"?>
+<post id="20090909141436"><title>基于Xml+Xsl的CMS系统——XmlCMS</title><datetime year="2009" month="09" day="09" time="14:14:36"/><author>Wilson</author><category>网站项目</category><tag>网站</tag><tag>博客系统</tag><tag>Xml</tag><tag>Xsl</tag><tag>CMS</tag><tag>Weblog</tag><summary><p><img src="images/XmlCMS.jpg" alt="XmlCMS"/></p>
+<p>　　新做的一套基于Xml+Xsl的无数据库Lite方案的博客系统。<br/>
+　　我的课程设计项目。<br/>
+　　耗时3天，完成基本功能。<br/>
+　　之后的一个月里，每天花费了一点时间，基本上把系统的主要部分完成。<br/>
+　　在暑假忙绿的学习抽出的空闲里面，把网站的侧边栏搞定了。主要用JS完成的功能，而且在各个主流浏览器中都有很好的兼容性。同时也修正了很多的bug，目前版本到了1.0了。<br/>
+　　暂时不支持留言，考虑到服务器的压力和实时性问题，一时间没有找到合适的解决方案。本来还要有访问次数记录的，也是这个问题，打算以后解决。</p></summary><content><p>　　目前大部分CMS系统使用动态语言如PHP、ASP、ASP.Net或JSP等编写，数据使用数据库系统提供，这样的系统功能强大，操作灵活。但是这些系统往往比较复杂，而且对服务器的要求往往比较高。数据库对数据提供非常强大的管理功能，但是配置和使用数据库比较麻烦。</p>
+<p>　　对于一个轻量级的CMS系统，没有必要使用数据库，可以使用Lite方案。不依赖于数据库，而采用文本文件或XML代替数据库的方案一般称为Lite。</p>
+<p>　　数据使用XML表示，而在表现层使用XSL是一个明智的选择。</p>
+<p>　　XML+XSL来实现CMS，不需要动态语言的支持就可以直接获取数据。</p>
+<p>　　通过浏览器可以直接打开.xml为扩展名的XML文件，以XML作为数据源，免去了使用动态语言连接和操作数据库读取数据的繁琐步骤。可以降低服务器的成本，极大的减少服务器的消耗。</p>
+<p>　　客户端直接读取的是XML形式的数据，而不是冗余的html，节省网络流量，如果加上gzip压缩，可以极大的节省网络资源。</p>
+<p>　　通过XSL来负责显示，将系统的数据和显示代码分离，能更好的使用OOD面向对象设计。
+页面由浏览器将XML套用XSL自行转换成XHTML，即页面的渲染是由客户端完成的，也可以在一定程度上减轻服务器压力。</p>
+<p>　　使用了一套Wordpress主题iNove 1.4.6，由国人设计师mg12设计，非常漂亮。</p></content></post>

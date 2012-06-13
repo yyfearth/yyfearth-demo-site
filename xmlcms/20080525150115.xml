@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="style/postview.xsl" type="text/xsl"?>
+<post id="20080525150115"><title>Java视听同步幻灯片播放器</title><datetime year="2008" month="05" day="25" time="15:01:15"/><author>Wilson</author><category>编程学习</category><tag>Java</tag><tag>学习</tag><tag>播放器</tag><summary><p>
+<img src="images/JMp3PicPlayer.png" alt="JMp3PicPlayer"/>
+</p>
+<p>
+　　这是我学习一个学期Java（选修）的成果。<br/>
+　　本程序是一个多媒体播放器，可以播放主要用于播放Mp3文件，并且可以通过读取同文件名里面的歌词文件（.lrc）里面的内容，但本程序不是显示同步歌词的播放器，这个同步歌词是特制的，是按照标准lrc标签的格式记录了一些图片的路径，这样本程序就可以像播放同步歌词一样同步播放图片，达到与语音同步的幻灯片播放效果。<br/>
+　　本程序在JDK1.6环境下编写，并且运用了JMF及其Mp3播放插件，所以必须在安装有JDK1.6+JMF+Mp3 Plugin的系统上运行。<br/>
+　　本包中所带的样本文件是“清华大学出版社 C++语言程序设计（第三版）的第一章的音频教程和幻灯片，由本书主编郑莉老师主讲”。
+</p></summary><content><p>
+　　运行命令行“java -jar Mp3PicPlayer.jar”，如果安装了最新版本的JDK支持双击直接运行。<br/>
+　　进入界面后程序要求打开文件，请选择相应的Mp3文件（本包中有样本文件在Sample文件夹里面，请选择打开Sample.mp3即可），程序就会开始运行，如果有相应的歌词文件，程序就会打开幻灯片窗口，否则只播放所选择文件的音频。<br/>
+　　开始播放后，如果幻灯片开始播放，用鼠标选中该窗口，您可以点击键盘的“←”方向键跳转到上一张幻灯片，或者点击键盘“→”方向键跳转到下一张幻灯片，跳转后播放的音频也会自动跳转到相应的位置。<br/>
+　　本程序的源代码最初是在网上搜索到的“我的新手版Java Mp3播放器”源代码（
+<a href="http://topic.csdn.net/u/20080108/13/443a6183-c904-4ca4-a0f6-c3f13b5bed8c.html">http://topic.csdn.net/u/20080108/13/443a6183-c904-4ca4-a0f6-c3f13b5bed8c.html</a>
+）的基础上完成的，但不要理解为抄袭，因为那个代码只提供了JMF的播放的方法和基本的界面，本程序的主要功能“幻灯片同步播放”完全是我自己花了一整天时间设计出来的，非常辛苦啊，不过都是使用内部类，统统在一个源文件里面了。<br/>
+　　因为时间仓促，程序还有很多bug没有解决，界面也很简陋，希望大家能见谅。已知bug：播放停止后，用方向键控制会出问题。
+</p>
+<p>
+by yyfearth.com<br/>2008/5/25
+</p>
+<br/>
+<p>
+<a name="Downloads" href="/Down/?Mp3PicPlayer.zip">
+<img src="images/download.jpg" border="0"/>
+</a>
+</p></content></post>
