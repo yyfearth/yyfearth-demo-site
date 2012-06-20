@@ -1,0 +1,21 @@
+#! package.cson
+name: 'demo.yyfearth.com'
+description: 'static apps demo site of yyfearth.com'
+keywords: ['static', 'apps', 'demo']
+version: '0.0.1'
+author: 'Wilson Young <yyfearth@gmail.com>'
+scripts:
+  start: 'node server/app.js'
+  test: './node_modules/.bin/nodemon src/dev.coffee'
+main: 'server/app.js'
+# license: 'BSD' # diff licenses for each app
+# dependencies: # dependencies to run
+#  none
+# use --production to avoid all dev dependencies
+# use --dev to install all with their dependencies
+# default npm will install the top-level dev dependencies
+devDependencies: # for build
+  # 'extra-coffee-script': 'latest'
+  'cssmin': 'latest'
+  'compress-buffer': 'latest'
+  'async': 'latest'
