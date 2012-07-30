@@ -4,7 +4,7 @@
 	init: '/welcome/home/index',
 	item: [{
 		name: 'welcome',
-		icon: '../images/nav-icons/welcome.png',
+		icon: 'images/nav-icons/welcome.png',
 		title: '欢迎',
 		type: 'component',
 		item: [{
@@ -15,12 +15,12 @@
 				name: 'index',
 				title: '欢迎界面',
 				type: 'item',
-				href: 'demo-content?/Common/Welcome.aspx'
+				href: 'demo-content.html?/Common/Welcome.aspx'
 			}, {
 				name: 'mywork',
 				title: '我的工作',
 				type: 'item',
-				href: 'demo-content?/MyWork/MyWorkView.aspx'
+				href: 'demo-content.html?/MyWork/MyWorkView.aspx'
 			}]
 		}, {
 			name: 'mywork',
@@ -30,58 +30,58 @@
 				name: 'JRDCL',
 				title: '今日待处理',
 				type: 'item',
-				href: 'demo-content?/MyWork/MyWorkView.aspx?itm=JRDCL'
+				href: 'demo-content.html?/MyWork/MyWorkView.aspx?itm=JRDCL'
 			}, {
 				name: 'empcontactmain',
 				title: '员工联络信息维护',
 				type: 'item',
-				href: 'demo-content?/masterdata/empcontactmain.aspx'
+				href: 'demo-content.html?/masterdata/empcontactmain.aspx'
 			}, {
 				name: 'RSDept2',
 				title: '部门维护(2列)',
 				type: 'item',
-				href: 'demo-content?/masterdata/ZZDepartment.aspx'
+				href: 'demo-content.html?/masterdata/ZZDepartment.aspx'
 			}, {
 				name: 'RSDept4',
 				title: '部门维护(4列)',
 				type: 'item',
-				href: 'demo-content?/masterdata/ZZDepartment43.aspx'
+				href: 'demo-content.html?/masterdata/ZZDepartment43.aspx'
 			}, {
 				name: 'ZZPosition',
 				title: '职位维护',
 				type: 'item',
-				href: 'demo-content?/masterdata/ZZPosition.aspx'
+				href: 'demo-content.html?/masterdata/ZZPosition.aspx'
 			}, {
 				name: 'TblDesc',
 				title: '各个表定义维护',
 				type: 'item',
-				href: 'demo-content?/masterdata/TblDesc.aspx'
+				href: 'demo-content.html?/masterdata/TblDesc.aspx'
 			}, {
 				name: 'FldDesc',
 				title: '各表字段定义维护',
 				type: 'item',
-				href: 'demo-content?/masterdata/FldDesc.aspx'
+				href: 'demo-content.html?/masterdata/FldDesc.aspx'
 			}, {
 				name: 'SYDCL',
 				title: '所有待处理',
 				type: 'item',
-				href: 'demo-content?/MyWork/MyWorkView.aspx?itm=SYDCL'
+				href: 'demo-content.html?/MyWork/MyWorkView.aspx?itm=SYDCL'
 			},
 			{
 				name: 'GQWCL',
 				title: '过期未处理工作',
 				type: 'item',
-				href: 'demo-content?/MyWork/MyWorkView.aspx?itm=GQWCL'
+				href: 'demo-content.html?/MyWork/MyWorkView.aspx?itm=GQWCL'
 			}, {
 				name: 'YCL',
 				title: '已处理工作',
 				type: 'item',
-				href: 'demo-content?/MyWork/MyWorkView.aspx?itm=YCL'
+				href: 'demo-content.html?/MyWork/MyWorkView.aspx?itm=YCL'
 			}]
 		}]
 	}, {
 		name: 'HR',
-		icon: '../images/nav-icons/personnel.png',
+		icon: 'images/nav-icons/personnel.png',
 		title: '人事管理',
 		type: 'component',
 		item: [{
@@ -92,72 +92,72 @@
 				name: 'bm',
 				title: '部门',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'gw',
 				title: '职位、岗位',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'xl',
 				title: '学历',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'mz',
 				title: '民族',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'sf',
 				title: '省份',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'zc',
 				title: '职称',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'gx',
 				title: '用工形式',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'jb',
 				title: '员工级别',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'fl',
 				title: '员工分类',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'lz',
 				title: '离职类型',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'jl',
 				title: '奖惩类型',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'xz',
 				title: '险种类型',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'ht',
 				title: '合同类型',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}, {
 				name: 'yd',
 				title: '异动类型',
 				type: 'item',
-				href: 'demo-content?/HR/HRMgt.aspx'
+				href: 'demo-content.html?/HR/HRMgt.aspx'
 			}]
 		}, {
 			name: 'dhsr',
@@ -167,22 +167,22 @@
 				name: 'jb',
 				title: '员工基本资料录入',
 				type: 'item',
-				href: 'demo-content?/hr/hr.aspx?itm=jb'
+				href: 'demo-content.html?/hr/hr.aspx?itm=jb'
 			}, {
 				name: 'pl',
 				title: '批量录入',
 				type: 'item',
-				href: 'demo-content?/hr/hr.aspx?itm=pl'
+				href: 'demo-content.html?/hr/hr.aspx?itm=pl'
 			}, {
 				name: 'jc',
 				title: '员工奖惩',
 				type: 'item',
-				href: 'demo-content?/hr/hr.aspx?itm=jc'
+				href: 'demo-content.html?/hr/hr.aspx?itm=jc'
 			}, {
 				name: 'lz',
 				title: '员工离职',
 				type: 'item',
-				href: 'demo-content?/hr/hr.aspx?itm=lz'
+				href: 'demo-content.html?/hr/hr.aspx?itm=lz'
 
 			}]
 		}, {
@@ -193,22 +193,22 @@
 				name: 'pl',
 				title: '员工批量修改',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'yd',
 				title: '员工异动',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'zdy',
 				title: '自定义字段',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'WSCKH',
 				title: '编辑员工录入界面',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}]
 		}, {
 			name: 'query_report',
@@ -218,47 +218,47 @@
 				name: 'ygq',
 				title: '员工查询',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'sr',
 				title: '生日',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'ht',
 				title: '合同到期',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'sy',
 				title: '试用到期',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'dq',
 				title: '短时间员工异动',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'bb',
 				title: '常用报表制作',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'zdy',
 				title: '自定义报表',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}, {
 				name: 'dy',
 				title: '报表输出、打印',
 				type: 'item',
-				href: 'demo-content?/HR/HRSearch.aspx'
+				href: 'demo-content.html?/HR/HRSearch.aspx'
 			}]
 		}]
 	}, {
 		name: 'salary',
-		icon: '../images/nav-icons/salary.png',
+		icon: 'images/nav-icons/salary.png',
 		title: '工资管理',
 		type: 'component',
 		item: [{
@@ -269,22 +269,22 @@
 				name: 'gdsr',
 				title: '固定项目数据录入',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx'
 			}, {
 				name: 'gdxg',
 				title: '固定项目数据修改',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtMgt.aspx?gdxg'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtMgt.aspx?gdxg'
 			}, {
 				name: 'bdsr',
 				title: '变动项目数据录入',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtMgt.aspx?bdsr'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtMgt.aspx?bdsr'
 			}, {
 				name: 'bdxg',
 				title: '变动项目数据修改',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtMgt.aspx？bdxg'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtMgt.aspx？bdxg'
 			}]
 		}, {
 			name: 'gzjs',
@@ -294,37 +294,37 @@
 				name: 'zz',
 				title: '计算在职员工',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=17'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=17'
 			}, {
 				name: 'lz',
 				title: '计算离职员工',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=16'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=16'
 			}, {
 				name: 'dgbm',
 				title: '计算单个部门',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=15'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=15'
 			}, {
 				name: 'xyg',
 				title: '计算选择员工',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=14'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=14'
 			}, {
 				name: 'sds',
 				title: '全部员工所得税计算',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=13'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=13'
 			}, {
 				name: 'bm',
 				title: '单个部门所得税计算',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=12'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=12'
 			}, {
 				name: 'yh',
 				title: '单个员工所得税计算',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=11'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=11'
 			}]
 		}, {
 			name: 'gzgl',
@@ -334,17 +334,17 @@
 				name: 'sd',
 				title: '工资设定',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=3'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=3'
 			}, {
 				name: 'yd',
 				title: '工资异动',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=2'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=2'
 			}, {
 				name: 'yjz',
 				title: '工资月结转',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=1'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=1'
 			}]
 		}, {
 			name: 'gzt',
@@ -354,17 +354,17 @@
 				name: 'zz',
 				title: '工资条制作',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=zz'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=zz'
 			}, {
 				name: 'xg',
 				title: '工资条修改',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=xg'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=xg'
 			}, {
 				name: 'dy',
 				title: '工资条打印',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=dy'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=dy'
 			}]
 		}, {
 			name: 'mt',
@@ -374,32 +374,32 @@
 				name: 'xm',
 				title: '工资项目',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=xm'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=xm'
 			}, {
 				name: 'gs',
 				title: '项目公式',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=gs'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=gs'
 			}, {
 				name: 'kj',
 				title: '会计时间',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=kj'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=kj'
 			}, {
 				name: 'cs',
 				title: '工资参数',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=cs'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=cs'
 			}, {
 				name: 'hl',
 				title: '币种汇率',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=hl'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=hl'
 			}, {
 				name: 'sd',
 				title: '税率设定',
 				type: 'item',
-				href: 'demo-content?/SalaryMgt/SalaryMgtSearch.aspx?itm=sd'
+				href: 'demo-content.html?/SalaryMgt/SalaryMgtSearch.aspx?itm=sd'
 			}]
 		}, {
 			name: 'bb',
@@ -409,22 +409,22 @@
 				name: 'zc',
 				title: '常用报表制作',
 				type: 'item',
-				href: 'demo-content?/Report/Salary.aspx?itm=zc'
+				href: 'demo-content.html?/Report/Salary.aspx?itm=zc'
 			}, {
 				name: 'zdt',
 				title: '自定义报表',
 				type: 'item',
-				href: 'demo-content?/Report/Salary.aspx?itm=zdt'
+				href: 'demo-content.html?/Report/Salary.aspx?itm=zdt'
 			}, {
 				name: 'dy',
 				title: '报表输出、打印',
 				type: 'item',
-				href: 'demo-content?/Report/Salary.aspx?itm=dy'
+				href: 'demo-content.html?/Report/Salary.aspx?itm=dy'
 			}]
 		}]
 	}, {
 		name: 'attendance',
-		icon: '../images/nav-icons/attendance.png',
+		icon: 'images/nav-icons/attendance.png',
 		title: '考勤管理',
 		type: 'component',
 		item: [{
@@ -435,27 +435,27 @@
 				name: 'qj',
 				title: '请假录入',
 				type: 'item',
-				href: 'demo-content?/Att/Search.aspx'
+				href: 'demo-content.html?/Att/Search.aspx'
 			}, {
 				name: 'cc',
 				title: '出差录入',
 				type: 'item',
-				href: 'demo-content?/Att/Mgt.aspx'
+				href: 'demo-content.html?/Att/Mgt.aspx'
 			}, {
 				name: 'bk',
 				title: '补卡录入',
 				type: 'item',
-				href: 'demo-content?/Att/Mgt1.aspx'
+				href: 'demo-content.html?/Att/Mgt1.aspx'
 			}, {
 				name: 'jb',
 				title: '加班录入',
 				type: 'item',
-				href: 'demo-content?/Att/Mgt2.aspx'
+				href: 'demo-content.html?/Att/Mgt2.aspx'
 			}, {
 				name: 'tz',
 				title: '工时调整',
 				type: 'item',
-				href: 'demo-content?/Att/Mgt3.aspx'
+				href: 'demo-content.html?/Att/Mgt3.aspx'
 			}]
 		}, {
 			name: 'kqjs',
@@ -465,17 +465,17 @@
 				name: 'zh',
 				title: '考勤原始资料转换',
 				type: 'item',
-				href: 'demo-content?/Att/Conv.aspx'
+				href: 'demo-content.html?/Att/Conv.aspx'
 			}, {
 				name: 'cl',
 				title: '考勤数据处理',
 				type: 'item',
-				href: 'demo-content?/Att/Proc.aspx'
+				href: 'demo-content.html?/Att/Proc.aspx'
 			}, {
 				name: 'tj',
 				title: '考勤月统计',
 				type: 'item',
-				href: 'demo-content?/Att/Month.aspx'
+				href: 'demo-content.html?/Att/Month.aspx'
 			}]
 		}, {
 			name: 'kccy',
@@ -485,17 +485,17 @@
 				name: 'jg',
 				title: '考勤结果查询',
 				type: 'item',
-				href: 'demo-content?/Att/Att.aspx?itm=jp'
+				href: 'demo-content.html?/Att/Att.aspx?itm=jp'
 			}, {
 				name: 'yc',
 				title: '考勤异常查询',
 				type: 'item',
-				href: 'demo-content?/Att/Att.aspx?itm=yc'
+				href: 'demo-content.html?/Att/Att.aspx?itm=yc'
 			}, {
 				name: 'ic',
 				title: 'IC卡管理',
 				type: 'item',
-				href: 'demo-content?/Att/Att.aspx?itm=ic'
+				href: 'demo-content.html?/Att/Att.aspx?itm=ic'
 			}]
 		}, {
 			name: 'pb',
@@ -505,17 +505,17 @@
 				name: 'bc',
 				title: '基本班次',
 				type: 'item',
-				href: 'demo-content?/Manager/Setting.aspx?itm=bc'
+				href: 'demo-content.html?/Manager/Setting.aspx?itm=bc'
 			}, {
 				name: 'ld',
 				title: '排班规律制定',
 				type: 'item',
-				href: 'demo-content?/Manager/Setting.aspx?itm=ld'
+				href: 'demo-content.html?/Manager/Setting.aspx?itm=ld'
 			}, {
 				name: 'pb',
 				title: '员工排班',
 				type: 'item',
-				href: 'demo-content?/Manager/Setting.aspx?itm=pb'
+				href: 'demo-content.html?/Manager/Setting.aspx?itm=pb'
 			}]
 		}, {
 			name: 'mt',
@@ -525,37 +525,37 @@
 				name: 'xh',
 				title: '基本资料修改',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=xh'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=xh'
 			}, {
 				name: 'pb',
 				title: '排班',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=pb'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=pb'
 			}, {
 				name: 'xr',
 				title: '周休日设定',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=xr'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=xr'
 			}, {
 				name: 'ytj',
 				title: '月统计项目设定',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=ytj'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=ytj'
 			}, {
 				name: 'kj',
 				title: '会计期间设定',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=kj'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=kj'
 			}, {
 				name: 'xj',
 				title: '休假政策设定',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=xj'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=xj'
 			}, {
 				name: 'cd',
 				title: '参数设定',
 				type: 'item',
-				href: 'demo-content?/Maintain/Maintain.aspx?itm=cd'
+				href: 'demo-content.html?/Maintain/Maintain.aspx?itm=cd'
 			}]
 		}, {
 			name: 'bb',
@@ -565,22 +565,22 @@
 				name: 'cy',
 				title: '常用报表制作',
 				type: 'item',
-				href: 'demo-content?/Report/MakeReport.aspx?itm=1'
+				href: 'demo-content.html?/Report/MakeReport.aspx?itm=1'
 			}, {
 				name: 'zdy',
 				title: '自定义报表',
 				type: 'item',
-				href: 'demo-content?/Report/MakeReport.aspx?itm=2'
+				href: 'demo-content.html?/Report/MakeReport.aspx?itm=2'
 			}, {
 				name: 'dy',
 				title: '报表输出、打印',
 				type: 'item',
-				href: 'demo-content?/Report/MakeReport.aspx?itm=3'
+				href: 'demo-content.html?/Report/MakeReport.aspx?itm=3'
 			}]
 		}]
 	}, {
 		name: 'setup',
-		icon: '../images/nav-icons/setup.png',
+		icon: 'images/nav-icons/setup.png',
 		title: '系统设置',
 		type: 'component',
 		item: [{
@@ -591,12 +591,12 @@
 				name: 'query',
 				title: '查询潜在客户',
 				type: 'item',
-				href: 'demo-content?/Setup/CustomerQZSearch.aspx'
+				href: 'demo-content.html?/Setup/CustomerQZSearch.aspx'
 			}, {
 				name: 'add',
 				title: '添加潜在客户',
 				type: 'item',
-				href: 'demo-content?/Setup/CustomerQZMgt.aspx'
+				href: 'demo-content.html?/Setup/CustomerQZMgt.aspx'
 			}]
 		}, {
 			name: 'qx',
@@ -606,27 +606,27 @@
 				name: 'query',
 				title: '查看',
 				type: 'item',
-				href: 'demo-content?/Setup/Priv.aspx?act=query'
+				href: 'demo-content.html?/Setup/Priv.aspx?act=query'
 			}, {
 				name: 'add',
 				title: '增加',
 				type: 'item',
-				href: 'demo-content?/Setup/Priv.aspx?act=add'
+				href: 'demo-content.html?/Setup/Priv.aspx?act=add'
 			}, {
 				name: 'mod',
 				title: '修改',
 				type: 'item',
-				href: 'demo-content?/Setup/Priv.aspx?act=mod'
+				href: 'demo-content.html?/Setup/Priv.aspx?act=mod'
 			}, {
 				name: 'del',
 				title: '删除',
 				type: 'item',
-				href: 'demo-content?/Setup/Priv.aspx?act=del'
+				href: 'demo-content.html?/Setup/Priv.aspx?act=del'
 			}, {
 				name: 'priv',
 				title: '特权',
 				type: 'item',
-				href: 'demo-content?/Setup/Priv.aspx?act=spc'
+				href: 'demo-content.html?/Setup/Priv.aspx?act=spc'
 			}]
 		}]
 	}]
