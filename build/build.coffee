@@ -5,136 +5,141 @@ fs = require 'fs'
 {exec} = require 'child_process'
 async = require 'async'
 {compress: gzip} = require 'compress-buffer'
-xcoffee = require 'extra-coffee-script'
-coffeekup = require 'coffeekup'
-stylus = require 'stylus'
 {cssmin} = require 'cssmin'
 #nib = require 'nib'
 
 HEADER = 'demo - yyfearth.com/myyapps.com'
 
-mkdir = (dir, callback) ->
+@async = async
+
+@exists = exists = fs.exists or path.exists
+@existsSync = existsSync = fs.existsSync or path.existsSync
+
+@mkdir = mkdir = (dir, callback) ->
   # console.log 'mkdir', base, _rel
-  if callback? # async
-    dir = path.resolve dir
-    exec "mkdir -p \"#{dir}\"", (err, stdout, stderr) ->
-      callback stderr if stderr
-      console.log err if err
-      unless err
-        callback?()
-        return
-      # fallback use sync
-      # mkdir dir
-      # callback?()
-      throw 'err'
-  else
-    _rel = path.relative __dirname, dir
-    return unless _rel
-    _rel = _rel.split /[\\\/]/
-    base = [__dirname]
-    base.push _rel.shift() while _rel[0] is '..'
-    base = path.resolve.apply null, base
-    while (r = _rel.shift())
-      base = path.join base, r
-      fs.mkdirSync base unless path.existsSync base
+  dir = path.resolve dir
+  exec "mkdir -p \"#{dir}\"", (err, stdout, stderr) ->
+    callback stderr if stderr
+    console.log err if err
+    unless err
+      callback?()
+      return
+    # fallback use sync
+    mkdirSync dir
+    callback?()
+    throw 'err'
   return
 # end of mkdir
 
-rmdir = (dir, callback) ->
-  if callback? # async
-    path.exists dir, (exists) ->
-      unless exists
+@mkdirSync = mkdirSync = (dir) ->
+  # console.log 'mkdir', base, _rel
+  _rel = path.relative __dirname, dir
+  return unless _rel
+  _rel = _rel.split /[\\\/]/
+  base = [__dirname]
+  base.push _rel.shift() while _rel[0] is '..'
+  base = path.resolve.apply null, base
+  while (r = _rel.shift())
+    base = path.join base, r
+    fs.mkdirSync base unless existsSync base
+  return
+# end of mkdir sync
+
+@rmdir = rmdir = (dir, callback) ->
+  exists dir, (exists) ->
+    unless exists
+      callback?()
+      return
+    fs.stat dir, (err, stat) ->
+      if err then callback err
+      unless stat.isDirectory() then callback "Path <#{dir}> is not a directory"
+      dir = path.resolve dir
+      console.log 'clean:', dir
+      exec "rm -rf \"#{dir}\"", (err, stdout, stderr) ->
+        callback stderr if stderr
+        unless err
+          callback?()
+          return
+        rmdirSync dir # fallback
         callback?()
-        return
-      fs.stat dir, (err, stat) ->
-        if err then callback err
-        unless stat.isDirectory() then callback "Path <#{dir}> is not a directory"
-        dir = path.resolve dir
-        console.log 'clean:', dir
-        exec "rm -rf \"#{dir}\"", (err, stdout, stderr) ->
-          callback stderr if stderr
-          unless err
-            callback?()
-            return
-          rmdir dir # fallback
-  else # sync
-    unless path.existsSync dir
-      # console.log 'Directory <#{dir}> does not exist'
-      return false
-    
-    stat = fs.statSync dir
-    unless stat.isDirectory() then callback "Path <#{dir}> is not a directory"
-
-    do act = (dir) ->
-      names = fs.readdirSync dir
-
-      for name in names
-        filePath = path.join dir, name
-
-        do (filePath) ->
-          stat = fs.statSync filePath
-
-          if stat.isFile()
-            # console.log "Delete #{filePath}"
-            fs.unlinkSync filePath
-          else if stat.isDirectory()
-            act filePath
-
-      # console.log "Remove #{dir}"
-      fs.rmdirSync dir
   return
 # end of rmdir
 
-cpdir = (from, to, callback) ->
-  # do not copy sub dirs for now
-  fs.readdir from, (err, files) ->
-    throw err if err
-    async.map files, (name, callback) ->
-      # console.log 'find', name
-      src = path.join from, name
-      fs.stat src, (err, stats) ->
-        if stats.isDirectory()
-          # console.log 'is dir', name
-          callback null
-        else
-          console.log 'copy file', name
-          fs.readFile src, 'binary', (err, data) ->
-            # console.log 'read', data.length
-            des = path.join to, name
-            write des, data,
-              encoding: 'binary'
-              callback: -> callback null,
-                filename: name
-                data: new Buffer data, 'binary'
-        return
-    , (err, data) ->
-      callback? err, data
+@rmdirSync = rmdirSync = (dir) ->
+  unless existsSync dir
+    # console.log 'Directory <#{dir}> does not exist'
+    return false
+  
+  stat = fs.statSync dir
+  unless stat.isDirectory() then callback "Path <#{dir}> is not a directory"
+
+  do act = (dir) ->
+    names = fs.readdirSync dir
+
+    for name in names
+      filePath = path.join dir, name
+
+      do (filePath) ->
+        stat = fs.statSync filePath
+
+        if stat.isFile()
+          # console.log "Delete #{filePath}"
+          fs.unlinkSync filePath
+        else if stat.isDirectory()
+          act filePath
+
+    # console.log "Remove #{dir}"
+    fs.rmdirSync dir
   return
-# end of cpdir
+# end of rmdir sync
 
-gzdir = (files, callback) ->
-  if callback?
-    async.forEach files, (f, c) ->
-      throw 'file.data is not a buffer' unless Buffer.isBuffer f.data
-      async.nextTick ->
-        f.size = f.data.length
-        f.data = gz f.data
-        f.gz = 1
-        c()
-    , (err) -> callback? err, files
-    return
-  else
-    files.forEach (f) ->
-      throw 'file.data is not a buffer' unless Buffer.isBuffer f.data
-      f.size = f.data.length
-      f.data = gz f.data
-      f.gz = 1
-    files
-# end of gzdir
+@lsdir = lsdir = (dir, callback) -> # fake async
+  async.nextTick -> callback lsdirSync dir
+  return
+# end of lsdir
 
-gz = (data, encoding) -> gzip (new Buffer data, encoding), 9
+@lsdirSync = lsdirSync = (dir) -> # sync only
+  return null unless existsSync dir
+  root = dir
+  dir = '.'
+  list = []
+  do _lsdir = (dir) ->
+    # console.log dir
+    (fs.readdirSync path.join root, dir).forEach (filename) ->
+      return if filename[0] is '.' # ignore hidden files
+      filepath = path.join dir, filename
+      stats = fs.statSync path.join root, filepath
+      if stats.isDirectory()
+        _lsdir filepath
+      else
+        list.push filepath
+  list.root = root
+  list
+# end of lsdir sync
 
-add_header = (filename, data, header = HEADER) ->
+#@batch = batch = (files, func, callback) ->
+  # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
+
+@readdirgz = readdirgz = (list, callback) ->
+  root = list.root
+  async.map list, (filename, _callback) ->
+    filepath = if root then path.join root, filename else filename
+    fs.readFile filepath, (err, data) ->
+      if err
+        _callback err
+      else
+        size = data.length
+        gz = 0
+        if (gz_data = gzip data, 9)
+          if gz_data.length < data.length
+            gz = 1
+            data = gz_data
+        _callback err, { filename, data, size, gz }
+  , callback
+  return
+# end of read dir
+
+@add_header = (filename, data, header = HEADER) ->
   ext = (path.extname filename)[1..].toLowerCase()
   switch ext
     when 'css', 'js'
@@ -145,7 +150,7 @@ add_header = (filename, data, header = HEADER) ->
       return data
 # end of add header
 
-write = (filename, data, {encoding, callback} = {}) ->
+@write = write = (filename, data, {encoding, callback} = {}) ->
   # console.log filename, data.length
   throw 'need filename and data' unless filename and data
   callback = cb if not callback? and typeof (cb = arguments[arguments.length - 1]) is 'function'
@@ -158,7 +163,7 @@ write = (filename, data, {encoding, callback} = {}) ->
   return
 # end of write
 
-load_pkg = (buf) ->
+@load_pkg = (buf) ->
   head_len = 0
   pad_len = 16
   pad_char = 0
@@ -188,19 +193,40 @@ load_pkg = (buf) ->
 # end of load package
 
 mime_dict =
-  ico  : 'image/x-icon'
-  png  : 'image/png'
-  js   : 'application/javascript'
-  css  : 'text/css'
-  htm  : 'text/html'
-  html : 'text/html'
+  js  : 'application/javascript;charset=utf-8'
+  css : 'text/css;charset=utf-8'
+  html: 'text/html;charset=utf-8'
+  txt : 'text/plain;charset=utf-8'
+  xml : 'text/xml;charset=utf-8'
+  png : 'image/png'
+  jpg : 'image/jpeg'
+  gif : 'image/gif'
+  ico : 'image/x-icon'
+  bmp : 'image/x-ms-bmp'
+  mp3 : 'audio/mpeg'
+  ogg : 'audio/ogg'
+  wav : 'audio/x-wav'
+
+mime_dict.jpeg = mime_dict.jpg
+mime_dict.htm = mime_dict.html
+
+# end of mime_dict
 
 get_mime = (filename) ->
   ext = path.extname filename
   mime_dict[ext[1..].toLowerCase()]
 
-build_pkg = (files, {filename, callback} = {}) ->
-  throw 'no files' unless files?.length
+@build_pkg = build_pkg = (files, {filename, callback} = {}) ->
+  if typeof files is 'string' # a dir path is given
+    files = lsdirSync files
+    readdirgz files, (err, files) ->
+      if err
+        throw err unless callback?
+        callback err
+      else
+        build_pkg files, {filename, callback}
+    return
+  throw 'no files' unless files?[0]?.filename
   head = v: 1, ts: new Date().getTime(), files: {}
   buffer = null
   buf_size = 0
@@ -208,7 +234,7 @@ build_pkg = (files, {filename, callback} = {}) ->
   pad_char = 0
   # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
   files.forEach (file) ->
-    throw 'data should be a gziped buffer' unless file.data and file.gz and Buffer.isBuffer file.data
+    throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
     len = file.data.length
     head.files[file.filename.toLowerCase()] =
       filename: file.filename
@@ -245,16 +271,3 @@ build_pkg = (files, {filename, callback} = {}) ->
       fs.writeFileSync filename, buffer, 'binary'
   buffer # return
 # end of build package
-
-module.exports = {
-  async
-  mkdir
-  rmdir
-  gzdir
-  write
-  cpdir
-  add_header
-  gz
-  load_pkg
-  build_pkg
-}
