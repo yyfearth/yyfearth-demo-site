@@ -120,21 +120,29 @@ HEADER = 'demo - yyfearth.com/myyapps.com'
 #@batch = batch = (files, func, callback) ->
   # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
 
+readFileQ = async.queue (file, callback) ->
+    fs.readFile file, callback
+, 128
+
+@read = read = (file, callback) ->
+  readFileQ.push file, callback
+
 @readdirgz = readdirgz = (list, callback) ->
   root = list.root
   async.map list, (filename, _callback) ->
     filepath = if root then path.join root, filename else filename
-    fs.readFile filepath, (err, data) ->
+    read filepath, (err, data) ->
       if err
         _callback err
-      else
-        size = data.length
+      else fs.stat filepath, (err, stats) ->
+        mtime = stats.mtime.getTime() or 0
+        size = stats.size or data.length
         gz = 0
         if (gz_data = gzip data, 9)
           if gz_data.length < data.length
             gz = 1
             data = gz_data
-        _callback err, { filename, data, size, gz }
+        _callback err, { filename, data, size, gz, mtime }
   , callback
   return
 # end of read dir
@@ -173,7 +181,7 @@ HEADER = 'demo - yyfearth.com/myyapps.com'
     head = JSON.parse head
   catch e
     throw 'cannot parse package'
-  throw 'unacceptable package version ' + head.v unless head.v is 1
+  throw 'unacceptable package version ' + head.v unless head.v is 2
   offset = head_len + pad_len
   # test padding
   # console.log buf.toString 'utf-8', head_len, offset
@@ -181,19 +189,28 @@ HEADER = 'demo - yyfearth.com/myyapps.com'
   #   throw 'read package error: head padding mismatch' if buf[i] isnt pad_char
   throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
   # load content
-  files = head.files
-  for name, file of files = head.files
-    if files.hasOwnProperty name
-      file.offset += offset
-      end = file.offset + file.length
-      throw 'read package error: padding mismatch' if buf[end] isnt pad_char
-      file.data = buf.slice file.offset, end
-      delete file.offset
+  headers = head.files.shift()
+  files = {}
+  head.files.forEach (f) ->
+    file = {}
+    # read from array
+    file[n] = v for n, v in headers
+    # get mime
+    file.mime = head.mimes[file.mime]
+    # calc offset and get data
+    file.offset += offset
+    end = file.offset + file.length
+    throw 'read package error: padding mismatch' if buf[end] isnt pad_char
+    file.data = buf.slice file.offset, end
+    delete file.offset
+    # set to files
+    files[file.filename] = file
   files
 # end of load package
 
 mime_dict =
   js  : 'application/javascript;charset=utf-8'
+  json: 'application/json;charset=utf-8'
   css : 'text/css;charset=utf-8'
   html: 'text/html;charset=utf-8'
   txt : 'text/plain;charset=utf-8'
@@ -206,11 +223,17 @@ mime_dict =
   mp3 : 'audio/mpeg'
   ogg : 'audio/ogg'
   wav : 'audio/x-wav'
+  appcache: 'text/cache-manifest'
+  0: 'application/octet-stream' # default
 
 mime_dict.jpeg = mime_dict.jpg
 mime_dict.htm = mime_dict.html
 
 # end of mime_dict
+
+get_mime_name = (filename) ->
+  ext = (path.extname filename)[1..].toLowerCase()
+  if mime_dict.hasOwnProperty ext then ext else 0
 
 get_mime = (filename) ->
   ext = path.extname filename
@@ -227,23 +250,45 @@ get_mime = (filename) ->
         build_pkg files, {filename, callback}
     return
   throw 'no files' unless files?[0]?.filename
-  head = v: 1, ts: new Date().getTime(), files: {}
+  head = v: 2, ts: new Date().getTime(), files: {}
   buffer = null
   buf_size = 0
   pad_len = 16
   pad_char = 0
-  # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
+
+  # v:1 files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
+
+  list = head.files = [[ # v:2 Header
+    'filename'
+    'mime'
+    'gz'
+    'size'
+    'mtime'
+    'offset'
+    'length'
+  ]]
+  head.mimes = mime_dict
   files.forEach (file) ->
     throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
     len = file.data.length
-    head.files[file.filename.toLowerCase()] =
-      filename: file.filename
-      mime: file.mime or get_mime file.filename
-      gz: 1 # force
-      offset: buf_size
-      length: len # gz length
-      size: file.size # orginal size
-      ts: file.ts or head.ts
+    list.push [ # v:2
+      file.filename
+      file.mime or get_mime_name file.filename # 0 for not found
+      file.gz
+      file.size # orginal size
+      file.mtime
+      buf_size
+      len
+    ]
+    # v:1
+    # head.files[file.filename.toLowerCase()] =
+    #   filename: file.filename
+    #   mime: file.mime or get_mime file.filename
+    #   gz: file.gz
+    #   offset: buf_size
+    #   length: len # gz length
+    #   size: file.size # orginal size
+    #   ts: file.ts or head.ts
     buf_size += pad_len + len
   head_buf = JSON.stringify head
   head_buf = new Buffer head_buf, 'utf-8'

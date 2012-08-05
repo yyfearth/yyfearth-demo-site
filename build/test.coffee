@@ -9,8 +9,11 @@ build_cache = (name) ->
       else
         console.log name, 'cached'
 
-build.async.forEach [
+[
   'baeword'
   'xmlcms'
   'menuwiz'
-], build_cache
+  'controls'
+  'nav-sidebar'
+  'index'
+].forEach build_cache
