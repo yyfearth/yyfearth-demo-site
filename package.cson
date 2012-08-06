@@ -6,7 +6,7 @@ version: '0.0.1'
 author: 'Wilson Young <yyfearth@gmail.com>'
 scripts:
   start: 'node server/app.js'
-  test: './node_modules/.bin/nodemon src/dev.coffee'
+  test: 'coffee src/dev.coffee'
 main: 'server/app.js'
 # license: 'BSD' # diff licenses for each app
 # dependencies: # dependencies to run
@@ -16,6 +16,6 @@ main: 'server/app.js'
 # default npm will install the top-level dev dependencies
 devDependencies: # for build
   # 'extra-coffee-script': 'latest'
-  'cssmin': 'latest'
+  # 'cssmin': 'latest'
   'compress-buffer': 'latest'
   'async': 'latest'

@@ -10,7 +10,7 @@
 	"author": "Wilson Young <yyfearth@gmail.com>",
 	"scripts": {
 		"start": "node server/app.js",
-		"test": "./node_modules/.bin/nodemon src/dev.coffee"
+		"test": "coffee src/dev.coffee"
 	},
 	"main": "server/app.js",
 	"devDependencies": {
