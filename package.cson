@@ -16,6 +16,6 @@ main: 'server/app.js'
 # default npm will install the top-level dev dependencies
 devDependencies: # for build
   # 'extra-coffee-script': 'latest'
-  'cssmin': 'latest'
+  # 'cssmin': 'latest'
   'compress-buffer': 'latest'
   'async': 'latest'

@@ -2,6 +2,30 @@
 
 PORT = 80
 
+server =
+  apps: [
+    root: '/'
+    package: 'index.cache'
+  ,
+    root: '/menuwiz/'
+    package: 'menuwiz.cache'
+  ,
+    root: '/baeword/'
+    package: 'baeword.cache'
+    lazyload: on
+  ,
+    root: '/xmlcms/'
+    package: 'xmlcms.cache'
+    lazyload: on
+  ,
+    root: '/nav-sidebar/'
+    package: 'nav-sidebar.cache'
+    lazyload: on
+  ,
+    root: '/controls/'
+    package: 'controls.cache'
+  ]
+
 fs = require 'fs'
 path = require 'path'
 http = require 'http'
@@ -49,11 +73,6 @@ class App
       files[file.filename] = file
     files
   # end of load cache package
-  files:
-    cache: path.join __dirname, 'cache.dat'
-    path: path.join __dirname, 'public'
-    regex:  /^\/(\w+\.(?:ico|js|css|html|png))(?:\?\d+)?$/ # /^\/(favicon\.ico|client\.(?:html|js|css))(?:\?\d+)?$/ # no index.html
-    client: 'client.html'
   prepare: (callback) ->
     fs.readFile @files.cache, 'binary', (err, data) =>
       throw err if err
