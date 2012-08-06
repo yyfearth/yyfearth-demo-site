@@ -14,7 +14,6 @@
 	},
 	"main": "server/app.js",
 	"devDependencies": {
-		"cssmin": "latest",
 		"compress-buffer": "latest",
 		"async": "latest"
 	}
