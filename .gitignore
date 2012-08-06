@@ -20,11 +20,3 @@ npm-debug.log
 
 # sublime
 *.sublime-project
-
-# os
-*.DS_Store
-._*
-.Spotlight-V100
-.Trashes
-Thumbs.db 
-Desktop.ini
