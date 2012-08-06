@@ -211,10 +211,12 @@ readFileQ = async.queue (file, callback) ->
 mime_dict =
   js  : 'application/javascript;charset=utf-8'
   json: 'application/json;charset=utf-8'
-  css : 'text/css;charset=utf-8'
   html: 'text/html;charset=utf-8'
-  txt : 'text/plain;charset=utf-8'
   xml : 'text/xml;charset=utf-8'
+  xsl : 'text/xml'
+  xsd : 'text/xml'
+  css : 'text/css'
+  txt : 'text/plain'
   png : 'image/png'
   jpg : 'image/jpeg'
   gif : 'image/gif'
@@ -267,13 +269,15 @@ get_mime = (filename) ->
     'offset'
     'length'
   ]]
-  head.mimes = mime_dict
+  mimes = head.mimes = {}
   files.forEach (file) ->
     throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
     len = file.data.length
+    mime = file.mime or get_mime_name file.filename # 0 for not found
+    mimes[mime] ?= mime_dict[mime]
     list.push [ # v:2
       file.filename
-      file.mime or get_mime_name file.filename # 0 for not found
+      mime
       file.gz
       file.size # orginal size
       file.mtime
