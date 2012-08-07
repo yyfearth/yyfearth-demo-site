@@ -184,9 +184,6 @@ readFileQ = async.queue (file, callback) ->
   throw 'unacceptable package version ' + head.v unless head.v is 2
   offset = head_len + pad_len
   # test padding
-  # console.log buf.toString 'utf-8', head_len, offset
-  # for i in [head_len...head_len + pad_len]
-  #   throw 'read package error: head padding mismatch' if buf[i] isnt pad_char
   throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
   # load content
   headers = head.files.shift()
@@ -194,7 +191,7 @@ readFileQ = async.queue (file, callback) ->
   head.files.forEach (f) ->
     file = {}
     # read from array
-    file[n] = v for n, v in headers
+    file[n] = f[i] for n, i in headers
     # get mime
     file.mime = head.mimes[file.mime]
     # calc offset and get data
