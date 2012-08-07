@@ -7,7 +7,7 @@ build = require './build/build'
 # async = build.async
 
 build_cache = (name) ->
-  cache_dir = path.join __dirname, 'cache'
+  cache_dir = if name is 'root' then __dirname else path.join __dirname, 'cache'
   dir = path.join __dirname, name
   fs.mkdir cache_dir, -> build.build_pkg dir,
     filename: (path.join cache_dir, name + '.cache')
@@ -40,5 +40,8 @@ task 'build:sidebar', 'Build sidebar.cache to cache', ->
 
 task 'build:index', 'Build index.cache to cache', ->
   build_cache 'index'
+
+task 'build:one', 'Build root.cache to root', ->
+  build_cache 'root'
 
 # task 'test', 'Run all test cases', ->
