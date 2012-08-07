@@ -1,45 +1,52 @@
 # server.coffee
 
-PORT = 80
+PORT = 8080
 
-server =
-  apps: [
-    root: '/'
-    package: 'index.cache'
-  ,
-    root: '/menuwiz/'
-    package: 'menuwiz.cache'
-  ,
-    root: '/baeword/'
-    package: 'baeword.cache'
-    lazyload: on
-  ,
-    root: '/xmlcms/'
-    package: 'xmlcms.cache'
-    lazyload: on
-  ,
-    root: '/nav-sidebar/'
-    package: 'nav-sidebar.cache'
-    lazyload: on
-  ,
-    root: '/controls/'
-    package: 'controls.cache'
-  ]
+# server =
+#   apps: [
+#     root: '/'
+#     package: 'index.cache'
+#   ,
+#     root: '/menuwiz/'
+#     package: 'menuwiz.cache'
+#   ,
+#     root: '/baeword/'
+#     package: 'baeword.cache'
+#     lazyload: on
+#   ,
+#     root: '/xmlcms/'
+#     package: 'xmlcms.cache'
+#     lazyload: on
+#   ,
+#     root: '/nav-sidebar/'
+#     package: 'nav-sidebar.cache'
+#     lazyload: on
+#   ,
+#     root: '/controls/'
+#     package: 'controls.cache'
+#   ]
 
 fs = require 'fs'
 path = require 'path'
 http = require 'http'
+url = require 'url'
 
-class App
+#CACHE = path.join __dirname, 'cache', 'index.cache'
+CACHE = path.join __dirname, 'root.cache'
+
+class FileServer
+
   @create: (ip, port) -> new @ ip, port
+
   constructor: (@ip, @port = PORT) ->
     @svr = http.createServer @routing.bind @
-    # prepare static files
-    @prepare =>
+    # load static files
+    @load =>
       @svr.listen @port, @ip
       console.log "server listening on port #{@port} ..."
       return
   # end of constructor
+
   _load_cache: (buf) ->
     head_len = 0
     pad_len = 16
@@ -60,7 +67,7 @@ class App
     head.files.forEach (f) ->
       file = {}
       # read from array
-      file[n] = v for n, v in headers
+      file[n] = f[i] for n, i in headers
       # get mime
       file.mime = head.mimes[file.mime]
       # calc offset and get data
@@ -73,54 +80,53 @@ class App
       files[file.filename] = file
     files
   # end of load cache package
-  prepare: (callback) ->
-    fs.readFile @files.cache, 'binary', (err, data) =>
+
+  load: (callback) ->
+    fs.readFile CACHE, 'binary', (err, data) =>
       throw err if err
       @cache = @_load_cache new Buffer data, 'binary'
       console.log 'cache loaded'
       callback()
       return
+    return
+  # end of load
+
   routing: (req, res) ->
     return unless @chkUA req, res
+
+    return unless @_chk_gz req, res
+
     # console.log 'routing', req.url
-    if req.url is '/'
-      # root
-      console.log 'A client has requested this route.'
-      id = new Date().getTime()
-      id++ while Channel.has (str_id = id.toString 36)
-      # res.redirect '/' + str_id
-      res.writeHead 302, 'Location': '/' + str_id
+    _url = url.parse req.url
+    _file = _url.pathname
+    
+    # add ending / for 1st level dir
+    if /^\/[^\/]+$/.test _file
+      res.writeHead 301, 'Location': _file + '/'
       res.end()
-    else if req.url.length > 1 and req.url[-1..] is '/'
-      # end with /
-      # res.redirect req.url[0...-1], 301
-      res.writeHead 301, 'Location': req.url[0...-1]
+      return
+    # TODO: deal with sub dir without ending /
+
+    _file += 'index.html' if _file[-1..] is '/' # index page
+
+    if _file[1..2] is '/-/' # admin
+      res.writeHead 404, 'Not Found'
       res.end()
-    else if req.url[-2..] is '!?'
-      if Channel.ID_REGEX.test (id = req.url[1...-2])
-        if Channel.has id
-          res.writeHead 304, 'Not Modified'
-        else
-          Channel.create { id, io: @io }
-          res.writeHead 201, 'Created'
-      else
-        res.writeHead 404, 'Not Found'
-      res.end()
-    else if Channel.ID_REGEX.test req.url
-      # channel
-      id = req.url[1..]
-      Channel.create { id, io: @io } unless Channel.has id
-      @serve { file: @files.client, caching: off, req, res }
+      return
+
+    # cached files
+    _f = _file[1..]
+    if @cache[_f]
+      # static files
+      # console.log 'routing file', req.url, file
+      @serve { url: _url.href, file: _f, caching: on, req, res }
     else
-      file = req.url.match @files.regex
-      if file?[1] and @cache[file[1]]
-        # static files
-        # console.log 'routing file', req.url, file
-        @serve { file: file[1], caching: on, req, res }
-      else
-        res.writeHead 404, 'Not Found'
-        res.end '404 resource not found'
+      res.writeHead 404, 'Not Found'
+      res.end '404 resource not found'
+    
     return
+  # end of routing
+
   chkUA: (req, res) ->
     ua = req.headers['user-agent']
     if /MSIE [1-9]\./i.test ua
@@ -134,45 +140,56 @@ class App
     # res.writeHead 200, 'Content-Type': 'text/plain'
     res.end msg
     return false
-  
+  # end of check ua
+
   MAX_AGE: 30 * 24 * 60 * 60 * 1000 # 30 days
   MIN_AGE: 60 * 1000 # 1 min
-  serve: ({file, caching, req, res}) ->
-    # console.log req.headers
-    unless /\bgzip\b/.test req.headers['accept-encoding']
-      console.log 'gzip unsupported for the client', file
-      res.writeHead 406, 'Not Acceptable'
-      res.end 'the client does not support gziped content.'
-      return
 
-    console.log file, @cache[file]
-    data = @cache[file]
-    data.mtime = new Date data.ts
-    data.gz = data.data # rename
-    # if caching
-    lastmod = req.headers['if-modified-since']
-    etag = req.headers['if-none-match']
-    if lastmod and etag and etag is data.etag and data.mtime is new Date(lastmod).getTime()
-      console.log 'serve file not modified', file
+  _chk_gz: (req, res) ->
+    unless /\bgzip\b/.test req.headers['accept-encoding']
+      console.log 'gzip unsupported for the client'
+      res.writeHead 406, 'Not Acceptable'
+      res.end 'the client does not support gziped content (accept-encoding header).'
+      false
+    true
+  # end of check gz support
+  _chk_mod: (url, file, req, res) ->
+    _lastmod = req.headers['if-modified-since']
+    _etag = req.headers['if-none-match']
+    if _lastmod and _etag and _etag is file._etag and file._mtime is new Date(_lastmod).getTime()
+      console.log 'serve file not modified', url
       res.writeHead 304, 'Not Modified'
       res.end()
-      return
+      false
+    true
+  # end of check if modified
+  serve: ({url, file, caching, req, res}) ->
+    # console.log req.headers
+
+    unless _file = @cache[file]
+      throw 'failed to find the file ' + file
+
+    _file._mtime = new Date _file.mtime
+
+    return unless @_chk_mod url, _file, req, res
 
     console.log 'serve file:', file, 'caching:', caching
 
-    expires = if caching then data.mtime.getTime() + @MAX_AGE else new Date().getTime() + @MIN_AGE
-    caching = if caching then @MAX_AGE else @MIN_AGE
+    _expires = if caching then _file.mtime + @MAX_AGE else new Date().getTime() + @MIN_AGE
+    _caching = if caching then @MAX_AGE else @MIN_AGE
 
-    res.setHeader 'Content-Type', data.mime
-    res.setHeader 'Content-Encoding', 'gzip'
+    res.setHeader 'Content-Type', _file.mime
+    res.setHeader 'Content-Encoding', 'gzip' if _file.gz
     res.setHeader 'Vary', 'Accept-Encoding'
-    res.setHeader 'Content-Length', data.gz.length
-    res.setHeader 'Last-Modified', data.mtime.toUTCString()
+    res.setHeader 'Content-Length', _file.data.length
+    res.setHeader 'Last-Modified', _file._mtime.toUTCString()
     res.setHeader 'Date', new Date().toUTCString()
-    res.setHeader 'Expires', new Date(expires).toUTCString()
-    res.setHeader 'Cache-Control', 'public, max-age=' + (caching / 1000)
-    res.setHeader 'ETag', "\"#{data.gz.length}-#{Date.parse data.mtime}\""
-    res.end data.gz, 'binary'
-    return
+    res.setHeader 'Expires', new Date(_expires).toUTCString()
+    res.setHeader 'Cache-Control', 'public, max-age=' + (_caching / 1000) | 0
+    res.setHeader 'ETag', _file._etag = "\"#{_file.size}-#{_file.mtime}\""
+    res.end _file.data, 'binary'
 
-app = App.create()
+    return
+  # end of serve file
+
+svr = FileServer.create()
