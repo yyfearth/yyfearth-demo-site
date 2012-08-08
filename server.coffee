@@ -31,8 +31,8 @@ path = require 'path'
 http = require 'http'
 url = require 'url'
 
-#CACHE = path.join __dirname, 'cache', 'index.cache'
-CACHE = path.join __dirname, 'root.cache'
+CACHE = path.join __dirname, 'cache', 'index.cache'
+#CACHE = path.join __dirname, 'root.cache'
 
 class FileServer
 
@@ -59,7 +59,6 @@ class FileServer
       throw 'cannot parse package'
     throw 'unacceptable package version ' + head.v unless head.v is 2
     offset = head_len + pad_len
-    # test padding
     throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
     # load content
     _get_data = (file) ->
@@ -74,13 +73,9 @@ class FileServer
       files = {}
       head.files.forEach (f) ->
         file = {}
-        # read from array
         file[n] = f[i] for n, i in headers
-        # get mime
         file.mime = head.mimes[file.mime]
-        # calc offset and get data
         _get_data file
-        # set to files
         files[file.filename.toLowerCase()] = file
     else # is json fast format
       files = head.files
@@ -99,6 +94,22 @@ class FileServer
     return
   # end of load
 
+  cmd: (cmd, req, res) ->
+    res.setHeader 'Cache-Control', 'no-cache'
+    console.log 'cmd', cmd
+    switch cmd
+      when ''
+        res.writeHead 403, 'Forbidden'
+        res.end "403 forbidden"
+      when 'reload'
+        @load ->
+          console.log 'reloaded'
+          res.end 'reloaded'
+      else
+        res.writeHead 501, 'Not Implemented'
+        res.end "501 cmd '#{cmd}' not implemented"
+    return
+
   routing: (req, res) ->
     return unless @chkUA req, res
 
@@ -107,6 +118,11 @@ class FileServer
     # console.log 'routing', req.url
     _url = url.parse req.url
     _file = _url.pathname
+
+    if _file[0..2] is '/-/' # admin cmds
+      cmd = _file[3..]
+      @cmd cmd, req, res
+      return
     
     # add ending / for 1st level dir
     if /^\/[^\/]+$/.test _file
@@ -114,13 +130,9 @@ class FileServer
       res.end()
       return
     # TODO: deal with sub dir without ending /
+    # looking for index.html in cache
 
     _file += 'index.html' if _file[-1..] is '/' # index page
-
-    if _file[1..2] is '/-/' # admin
-      res.writeHead 404, 'Not Found'
-      res.end()
-      return
 
     # cached files
     _f = _file[1..]
@@ -186,6 +198,7 @@ class FileServer
     _expires = if caching then _file.mtime + @MAX_AGE else new Date().getTime() + @MIN_AGE
     _caching = if caching then @MAX_AGE else @MIN_AGE
 
+    # for IE6 do not use 'Cache-Control: no-cache'
     res.setHeader 'Content-Type', _file.mime
     res.setHeader 'Content-Encoding', 'gzip' if _file.gz
     res.setHeader 'Vary', 'Accept-Encoding'
