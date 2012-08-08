@@ -205,7 +205,8 @@ readFileQ = async.queue (file, callback) ->
       # calc offset and get data
       _get_data file
       # set to files
-      files[file.filename.toLowerCase()] = file
+      files[file.filename] = file # case sensitive
+      # files[file.filename.toLowerCase()] = file # case insensitive
   else # is json fast format
     files = head.files
     _get_data files[name] for name in Object.getOwnPropertyNames files
@@ -297,7 +298,8 @@ get_mime = (filename) ->
       len = file.data.length
       mime = file.mime or get_mime file.filename # 0 for not found
 
-      head.files[file.filename.toLowerCase()] =
+      # head.files[file.filename.toLowerCase()] = # case insensitive
+      head.files[file.filename] = # case sensitive
         filename: file.filename
         mime: file.mime or get_mime file.filename
         gz: file.gz
