@@ -2,36 +2,34 @@
 
 PORT = 8080
 
-# server =
-#   apps: [
-#     root: '/'
-#     package: 'index.cache'
-#   ,
-#     root: '/menuwiz/'
-#     package: 'menuwiz.cache'
-#   ,
-#     root: '/baeword/'
-#     package: 'baeword.cache'
-#     lazyload: on
-#   ,
-#     root: '/xmlcms/'
-#     package: 'xmlcms.cache'
-#     lazyload: on
-#   ,
-#     root: '/nav-sidebar/'
-#     package: 'nav-sidebar.cache'
-#     lazyload: on
-#   ,
-#     root: '/controls/'
-#     package: 'controls.cache'
-#   ]
+CACHE =
+  base: 'cache'
+  packages: [
+    root: '/'
+    package: 'index.cache'
+  ,
+    root: '/menuwiz/'
+    package: 'menuwiz.cache'
+  ,
+    root: '/baeword/'
+    package: 'baeword.cache'
+    lazyload: on
+  ,
+    root: '/xmlcms/'
+    package: 'xmlcms.cache'
+    lazyload: on
+  ,
+    root: '/nav-sidebar/'
+    package: 'nav-sidebar.cache'
+    lazyload: on
+  ]
 
 fs = require 'fs'
 path = require 'path'
 http = require 'http'
 url = require 'url'
 
-CACHE = path.join __dirname, 'cache', 'index.cache'
+#CACHE = path.join __dirname, 'cache', 'index.cache'
 #CACHE = path.join __dirname, 'root.cache'
 
 class FileServer
@@ -46,6 +44,36 @@ class FileServer
       console.log "server listening on port #{@port} ..."
       return
   # end of constructor
+
+  _load_caches: (callback) -> # run once
+    _cache = @cache = {}
+    _count = CACHE.packages.length
+    _callback = (err) ->
+      if err
+        console.log 'err', err
+        callback err
+      else unless --_count
+        callback null, _cache
+      return
+    CACHE.packages.forEach (cache) =>
+      _pkg = path.join __dirname, CACHE.base, cache.package
+      # ignored lazyload for now
+      fs.readFile _pkg, 'binary', (err, data) =>
+        return _callback err if err
+
+        _files = @_load_cache new Buffer data, 'binary'
+
+        for filename in Object.getOwnPropertyNames _files
+          _path = cache.root + filename
+          _file = _cache[_path] = _files[filename]
+          _file.path = _path
+          _file.filename = path.basename _path
+
+        console.log 'cache', cache.package, 'loaded'
+        _callback null
+        return
+      # end of read file
+    return
 
   _load_cache: (buf) ->
     head_len = 0
@@ -76,7 +104,7 @@ class FileServer
         file[n] = f[i] for n, i in headers
         file.mime = head.mimes[file.mime]
         _get_data file
-        files[file.filename.toLowerCase()] = file
+        files[file.filename] = file
     else # is json fast format
       files = head.files
       _get_data files[name] for name in Object.getOwnPropertyNames files
@@ -85,10 +113,9 @@ class FileServer
   # end of load cache package
 
   load: (callback) ->
-    fs.readFile CACHE, 'binary', (err, data) =>
+    @_load_caches (err, cache) =>
       throw err if err
-      @cache = @_load_cache new Buffer data, 'binary'
-      console.log 'cache loaded'
+      console.log 'init cache loaded'
       callback()
       return
     return
@@ -125,7 +152,7 @@ class FileServer
       return
     
     # add ending / for 1st level dir
-    if /^\/[^\/]+$/.test _file
+    if /^\/[\w\-]+$/.test _file
       res.writeHead 301, 'Location': _file + '/'
       res.end()
       return
@@ -135,11 +162,10 @@ class FileServer
     _file += 'index.html' if _file[-1..] is '/' # index page
 
     # cached files
-    _f = _file[1..]
-    if @cache[_f]
+    if @cache[_file]
       # static files
       # console.log 'routing file', req.url, file
-      @serve { url: _url.href, file: _f, caching: on, req, res }
+      @serve { url: _url.href, file: _file, caching: on, req, res }
     else
       res.writeHead 404, 'Not Found'
       res.end '404 resource not found'
