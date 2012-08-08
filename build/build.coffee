@@ -186,22 +186,30 @@ readFileQ = async.queue (file, callback) ->
   # test padding
   throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
   # load content
-  headers = head.files.shift()
-  files = {}
-  head.files.forEach (f) ->
-    file = {}
-    # read from array
-    file[n] = f[i] for n, i in headers
-    # get mime
-    file.mime = head.mimes[file.mime]
-    # calc offset and get data
+  _get_data = (file) ->
     file.offset += offset
     end = file.offset + file.length
     throw 'read package error: padding mismatch' if buf[end] isnt pad_char
     file.data = buf.slice file.offset, end
     delete file.offset
-    # set to files
-    files[file.filename] = file
+    return
+  if Array.isArray head.files # is compact format
+    headers = head.files.shift()
+    files = {}
+    head.files.forEach (f) ->
+      file = {}
+      # read from array
+      file[n] = f[i] for n, i in headers
+      # get mime
+      file.mime = head.mimes[file.mime]
+      # calc offset and get data
+      _get_data file
+      # set to files
+      files[file.filename.toLowerCase()] = file
+  else # is json fast format
+    files = head.files
+    _get_data files[name] for name in Object.getOwnPropertyNames files
+  # end of if is array
   files
 # end of load package
 
@@ -255,42 +263,51 @@ get_mime = (filename) ->
   pad_len = 16
   pad_char = 0
 
-  # v:1 files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
+  if files.length > 16 # use compact format
+    list = head.files = [[ # Header
+      'filename'
+      'mime'
+      'gz'
+      'size'
+      'mtime'
+      'offset'
+      'length'
+    ]]
+    mimes = head.mimes = {}
+    files.forEach (file) ->
+      throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
+      len = file.data.length
+      mime = file.mime or get_mime_name file.filename # 0 for not found
+      mimes[mime] ?= mime_dict[mime]
+      list.push [
+        file.filename
+        mime
+        file.gz
+        file.size # orginal size
+        file.mtime
+        buf_size
+        len
+      ]
+      buf_size += pad_len + len
+  else # files.length <= 64, use json format for small cache
+    # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
+    files.forEach (file) ->
+      throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
+      
+      len = file.data.length
+      mime = file.mime or get_mime file.filename # 0 for not found
 
-  list = head.files = [[ # v:2 Header
-    'filename'
-    'mime'
-    'gz'
-    'size'
-    'mtime'
-    'offset'
-    'length'
-  ]]
-  mimes = head.mimes = {}
-  files.forEach (file) ->
-    throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
-    len = file.data.length
-    mime = file.mime or get_mime_name file.filename # 0 for not found
-    mimes[mime] ?= mime_dict[mime]
-    list.push [ # v:2
-      file.filename
-      mime
-      file.gz
-      file.size # orginal size
-      file.mtime
-      buf_size
-      len
-    ]
-    # v:1
-    # head.files[file.filename.toLowerCase()] =
-    #   filename: file.filename
-    #   mime: file.mime or get_mime file.filename
-    #   gz: file.gz
-    #   offset: buf_size
-    #   length: len # gz length
-    #   size: file.size # orginal size
-    #   ts: file.ts or head.ts
-    buf_size += pad_len + len
+      head.files[file.filename.toLowerCase()] =
+        filename: file.filename
+        mime: file.mime or get_mime file.filename
+        gz: file.gz
+        offset: buf_size
+        length: len # gz length
+        size: file.size # orginal size
+        mtime: file.mtime
+      
+      buf_size += pad_len + len
+  # end of if files.length > 64
   head_buf = JSON.stringify head
   head_buf = new Buffer head_buf, 'utf-8'
   head_len = head_buf.length

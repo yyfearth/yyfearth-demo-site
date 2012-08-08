@@ -62,22 +62,30 @@ class FileServer
     # test padding
     throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
     # load content
-    headers = head.files.shift()
-    files = {}
-    head.files.forEach (f) ->
-      file = {}
-      # read from array
-      file[n] = f[i] for n, i in headers
-      # get mime
-      file.mime = head.mimes[file.mime]
-      # calc offset and get data
+    _get_data = (file) ->
       file.offset += offset
       end = file.offset + file.length
       throw 'read package error: padding mismatch' if buf[end] isnt pad_char
       file.data = buf.slice file.offset, end
       delete file.offset
-      # set to files
-      files[file.filename] = file
+      return
+    if Array.isArray head.files # is compact format
+      headers = head.files.shift()
+      files = {}
+      head.files.forEach (f) ->
+        file = {}
+        # read from array
+        file[n] = f[i] for n, i in headers
+        # get mime
+        file.mime = head.mimes[file.mime]
+        # calc offset and get data
+        _get_data file
+        # set to files
+        files[file.filename.toLowerCase()] = file
+    else # is json fast format
+      files = head.files
+      _get_data files[name] for name in Object.getOwnPropertyNames files
+    # end of if is array
     files
   # end of load cache package
 
