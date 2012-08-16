@@ -75,17 +75,19 @@ class FileServer
     return
 
   _load_cache: (buf) ->
-    head_len = 0
+    head_len = 1
     pad_len = 16
     pad_char = 0
     head_len++ while buf[head_len]
-    head = buf.toString 'utf-8', 0, head_len
+    head = buf.toString 'utf-8', 1, head_len
+    throw 'read package error: format padding mismatch' unless buf[0] is buf[buf.length - 1] is pad_char
     try
       head = JSON.parse head
     catch e
       throw 'cannot parse package'
     throw 'unacceptable package version ' + head.v unless head.v is 2
     offset = head_len + pad_len
+    # test padding
     throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
     # load content
     _get_data = (file) ->
@@ -100,10 +102,15 @@ class FileServer
       files = {}
       head.files.forEach (f) ->
         file = {}
+        # read from array
         file[n] = f[i] for n, i in headers
+        # get mime
         file.mime = head.mimes[file.mime]
+        # calc offset and get data
         _get_data file
-        files[file.filename] = file
+        # set to files
+        files[file.filename] = file # case sensitive
+        # files[file.filename.toLowerCase()] = file # case insensitive
     else # is json fast format
       files = head.files
       _get_data files[name] for name in Object.getOwnPropertyNames files
@@ -196,29 +203,31 @@ class FileServer
       res.writeHead 406, 'Not Acceptable'
       res.end 'the client does not support gziped content (accept-encoding header).'
       false
-    true
+    else true
   # end of check gz support
   _chk_mod: (url, file, req, res) ->
     _lastmod = req.headers['if-modified-since']
     _etag = req.headers['if-none-match']
-    if _lastmod and _etag and _etag is file._etag and file._mtime is new Date(_lastmod).getTime()
-      console.log 'serve file not modified', url
+    if _lastmod and _etag and _etag is file._etag and file.mtime is new Date(_lastmod).getTime()
+      console.log '304 served file not modified', url
       res.writeHead 304, 'Not Modified'
       res.end()
       false
-    true
+    else true
   # end of check if modified
   serve: ({url, file, caching, req, res}) ->
     # console.log req.headers
+    console.log 'req:', req.connection.remoteAddress, req.url
 
     unless _file = @cache[file]
       throw 'failed to find the file ' + file
 
-    _file._mtime = new Date _file.mtime
+    _file._mtime ?= new Date _file.mtime
+    _file._etag ?= "\"#{_file.size}-#{_file.mtime}\""
 
     return unless @_chk_mod url, _file, req, res
 
-    console.log 'serve file:', file, 'caching:', caching
+    console.log '200 serve file:', file # , 'caching:', caching
 
     _expires = if caching then _file.mtime + @MAX_AGE else new Date().getTime() + @MIN_AGE
     _caching = if caching then @MAX_AGE else @MIN_AGE
@@ -232,7 +241,7 @@ class FileServer
     res.setHeader 'Date', new Date().toUTCString()
     res.setHeader 'Expires', new Date(_expires).toUTCString()
     res.setHeader 'Cache-Control', 'public, max-age=' + (_caching / 1000) | 0
-    res.setHeader 'ETag', _file._etag = "\"#{_file.size}-#{_file.mtime}\""
+    res.setHeader 'ETag', _file._etag
     res.end _file.data, 'binary'
 
     return

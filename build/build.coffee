@@ -170,11 +170,12 @@ readFileQ = async.queue (file, callback) ->
 # end of write
 
 @load_pkg = (buf) ->
-  head_len = 0
+  head_len = 1
   pad_len = 16
   pad_char = 0
   head_len++ while buf[head_len]
-  head = buf.toString 'utf-8', 0, head_len
+  head = buf.toString 'utf-8', 1, head_len
+  throw 'read package error: format padding mismatch' unless buf[0] is buf[buf.length - 1] is pad_char
   try
     head = JSON.parse head
   catch e
@@ -308,23 +309,23 @@ get_mime = (filename) ->
       
       buf_size += pad_len + len
   # end of if files.length > 64
-  head_buf = JSON.stringify head
-  head_buf = new Buffer head_buf, 'utf-8'
+
+  head_buf = new Buffer (JSON.stringify head), 'utf-8'
   head_len = head_buf.length
-  buf_size += head_len + 1 # buffer_size already contain an extra pad_len
+  buf_size += head_len + 2 # buffer_size already contain an extra pad_len
   buffer = new Buffer buf_size
   # fill buffer
-  cur_pos = 0
-  # set head to the start of buffer
+  buffer.fill pad_char # fill pad_char to all
+  cur_pos = 1
+  # set head to the start (2rd char) of buffer
   head_buf.copy buffer, cur_pos
   cur_pos += head_len
   # set data to buffer with padding
   files.forEach (file) ->
-    buffer.fill pad_char, cur_pos, cur_pos + pad_len
     cur_pos += pad_len
     file.data.copy buffer, cur_pos
     cur_pos += file.data.length
-  buffer.fill pad_char, buf_size - 1
+    return
   # end of set buffer
   if filename
     if callback? # async (callback is not func means no callback)
