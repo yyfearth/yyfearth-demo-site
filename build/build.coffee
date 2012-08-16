@@ -4,8 +4,9 @@ path = require 'path'
 fs = require 'fs'
 {exec} = require 'child_process'
 async = require 'async'
-{compress: gzip} = require 'compress-buffer'
-{cssmin} = require 'cssmin'
+zlib = require 'zlib'
+# gzip = zlib.createGzip level: 9, memLevel: 9
+# {cssmin} = require 'cssmin'
 #nib = require 'nib'
 
 HEADER = 'demo - yyfearth.com/myyapps.com'
@@ -138,11 +139,11 @@ readFileQ = async.queue (file, callback) ->
         mtime = stats.mtime.getTime() or 0
         size = stats.size or data.length
         gz = 0
-        if (gz_data = gzip data, 9)
+        zlib.gzip data, (err, gz_data) ->
           if gz_data.length < data.length
             gz = 1
             data = gz_data
-        _callback err, { filename, data, size, gz, mtime }
+          _callback err, { filename, data, size, gz, mtime }
   , callback
   return
 # end of read dir

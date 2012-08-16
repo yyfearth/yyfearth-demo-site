@@ -17,5 +17,4 @@ main: 'server/app.js'
 devDependencies: # for build
   # 'extra-coffee-script': 'latest'
   # 'cssmin': 'latest'
-  'compress-buffer': 'latest'
   'async': 'latest'
