@@ -5,9 +5,6 @@ fs = require 'fs'
 {exec} = require 'child_process'
 async = require 'async'
 zlib = require 'zlib'
-# gzip = zlib.createGzip level: 9, memLevel: 9
-# {cssmin} = require 'cssmin'
-#nib = require 'nib'
 
 HEADER = 'demo - yyfearth.com/myyapps.com'
 

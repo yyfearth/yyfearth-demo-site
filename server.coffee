@@ -24,13 +24,12 @@ CACHE =
     lazyload: on
   ]
 
+#CACHE = packages: [{ root: '/', package: 'root.cache' }]
+
 fs = require 'fs'
 path = require 'path'
 http = require 'http'
 url = require 'url'
-
-#CACHE = path.join __dirname, 'cache', 'index.cache'
-#CACHE = path.join __dirname, 'root.cache'
 
 class FileServer
 
