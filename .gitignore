@@ -1,0 +1,11 @@
+# only allowed menuwiz sub dir
+*
+!/menuwiz/
+
+# os
+*.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db 
+Desktop.ini
