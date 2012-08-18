@@ -13,15 +13,15 @@ CACHE =
   ,
     root: '/baeword/'
     package: 'baeword.cache'
-    lazyload: on
+    # lazyload: on
   ,
     root: '/xmlcms/'
     package: 'xmlcms.cache'
-    lazyload: on
+    # lazyload: on
   ,
     root: '/nav-sidebar/'
     package: 'nav-sidebar.cache'
-    lazyload: on
+    # lazyload: on
   ]
 
 #CACHE = packages: [{ root: '/', package: 'root.cache' }]
