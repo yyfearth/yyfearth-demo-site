@@ -1,5 +1,6 @@
 {
 	"name": "demo.yyfearth.com",
+	"subdomain": "yyfearth",
 	"description": "static apps demo site of yyfearth.com",
 	"keywords": [
 		"static",
@@ -9,10 +10,13 @@
 	"version": "0.0.1",
 	"author": "Wilson Young <yyfearth@gmail.com>",
 	"scripts": {
-		"start": "node server/app.js",
-		"test": "coffee src/dev.coffee"
+		"start": "node server.js",
+		"test": "coffee server.coffee"
 	},
-	"main": "server/app.js",
+	"main": "server.js",
+	"engines": {
+		"node": "0.6.x || 0.8.x"
+	},
 	"devDependencies": {
 		"async": "latest"
 	}
