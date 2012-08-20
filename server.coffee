@@ -22,6 +22,10 @@ CACHE =
     root: '/nav-sidebar/'
     package: 'nav-sidebar.cache'
     # lazyload: on
+  ,
+    root: '/driver-asst/'
+    package: 'driver-asst.cache'
+    # lazyload: on
   ]
 
 #CACHE = packages: [{ root: '/', package: 'root.cache' }]

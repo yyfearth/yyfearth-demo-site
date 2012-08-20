@@ -23,6 +23,7 @@ task 'build', 'Build caches to cache', ->
     'xmlcms'
     'menuwiz'
     'nav-sidebar'
+    'driver-asst'
     'index'
   ].forEach build_cache
 
@@ -36,7 +37,10 @@ task 'build:menuwiz', 'Build menuwiz.cache to cache', ->
   build_cache 'menuwiz'
 
 task 'build:sidebar', 'Build sidebar.cache to cache', ->
-  build_cache 'sidebar'
+  build_cache 'nav-sidebar'
+
+task 'build:drvasst', 'Build sidebar.cache to cache', ->
+  build_cache 'driver-asst'
 
 task 'build:index', 'Build index.cache to cache', ->
   build_cache 'index'
