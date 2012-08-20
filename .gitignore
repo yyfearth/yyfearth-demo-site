@@ -1,0 +1,11 @@
+# only allowed river-asst sub dir
+*
+!/driver-asst/
+
+# os
+*.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db 
+Desktop.ini
