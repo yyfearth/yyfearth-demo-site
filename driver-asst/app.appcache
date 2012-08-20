@@ -1,0 +1,58 @@
+CACHE MANIFEST
+
+#version 1.23 2012-08-19
+
+CACHE:
+
+# Google Weather Icons
+//www.google.com/ig/images/weather/sunny.gif
+//www.google.com/ig/images/weather/mostly_sunny.gif
+//www.google.com/ig/images/weather/partly_cloudy.gif
+//www.google.com/ig/images/weather/mostly_cloudy.gif
+//www.google.com/ig/images/weather/chance_of_storm.gif
+//www.google.com/ig/images/weather/rain.gif
+//www.google.com/ig/images/weather/chance_of_rain.gif
+//www.google.com/ig/images/weather/chance_of_snow.gif
+//www.google.com/ig/images/weather/cloudy.gif
+//www.google.com/ig/images/weather/mist.gif
+//www.google.com/ig/images/weather/storm.gif
+//www.google.com/ig/images/weather/thunderstorm.gif
+//www.google.com/ig/images/weather/chance_of_tstorm.gif
+//www.google.com/ig/images/weather/sleet.gif
+//www.google.com/ig/images/weather/snow.gif
+//www.google.com/ig/images/weather/icy.gif
+//www.google.com/ig/images/weather/dust.gif
+//www.google.com/ig/images/weather/fog.gif
+//www.google.com/ig/images/weather/smoke.gif
+//www.google.com/ig/images/weather/haze.gif
+//www.google.com/ig/images/weather/flurries.gif
+
+#internal HTML documents
+index.html
+mobile.html
+emulator.html
+
+#style sheets
+lib/jquery.mobile-1.0.min.css
+app.css
+
+#style sheet images
+lib/images/ajax-loader.png
+lib/images/icons-18-black.png
+lib/images/icons-18-white.png
+lib/images/icons-36-black.png
+lib/images/icons-36-white.png
+res/kr.jpg
+res/star.png
+res/halfstar.png
+res/iphone.png
+res/android.png
+res/wp7.png
+
+#javascript files
+lib/jquery-1.7.1.min.js
+lib/jquery.mobile-1.0.min.js
+app.js
+
+NETWORK:
+*
