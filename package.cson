@@ -1,9 +1,15 @@
 #! package.cson
 name: 'demo.yyfearth.com'
 subdomain: 'yyfearth'
+domains: [
+	'demo.yyfearth.com'
+	'apps.yyfearth.com'
+	'demo.myyapps.com'
+	'apps.myyapps.com'
+],
 description: 'static apps demo site of yyfearth.com'
 keywords: ['static', 'apps', 'demo']
-version: '0.0.1'
+version: '1.0.0'
 author: 'Wilson Young <yyfearth@gmail.com>'
 scripts:
   start: 'node server.js'
