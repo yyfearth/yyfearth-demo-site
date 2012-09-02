@@ -3,8 +3,8 @@
 path = require 'path'
 fs = require 'fs'
 {exec} = require 'child_process'
-async = require 'async'
 zlib = require 'zlib'
+async = require './async'
 
 HEADER = 'demo - yyfearth.com/myyapps.com'
 
@@ -20,11 +20,11 @@ HEADER = 'demo - yyfearth.com/myyapps.com'
     callback stderr if stderr
     console.log err if err
     unless err
-      callback?()
+      callback? null
       return
     # fallback use sync
     mkdirSync dir
-    callback?()
+    callback? null
     throw 'err'
   return
 # end of mkdir
@@ -263,7 +263,7 @@ get_mime = (filename) ->
   pad_len = 16
   pad_char = 0
 
-  if files.length > 16 # use compact format
+  if files.length > 16 # compact_count use compact format
     list = head.files = [[ # Header
       'filename'
       'mime'
@@ -289,7 +289,7 @@ get_mime = (filename) ->
         len
       ]
       buf_size += pad_len + len
-  else # files.length <= 64, use json format for small cache
+  else # files.length <= compact_count, use json format for small cache
     # files = [ {filename: '', mime: '', size: 0, data: Buffer} ]
     files.forEach (file) ->
       throw 'data should be a buffer' unless file.data and Buffer.isBuffer file.data
@@ -308,7 +308,7 @@ get_mime = (filename) ->
         mtime: file.mtime
       
       buf_size += pad_len + len
-  # end of if files.length > 64
+  # end of if files.length > compact_count
 
   head_buf = new Buffer (JSON.stringify head), 'utf-8'
   head_len = head_buf.length

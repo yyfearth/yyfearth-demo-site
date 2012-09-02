@@ -17,33 +17,21 @@ build_cache = (name) ->
       else
         console.log name, 'cached'
 
+pkgs = [
+  'baeword'
+  'xmlcms'
+  'menuwiz'
+  'nav-sidebar'
+  'driver-asst'
+  'index'
+]
+
 task 'build', 'Build caches to cache', ->
-  [
-    'baeword'
-    'xmlcms'
-    'menuwiz'
-    'nav-sidebar'
-    'driver-asst'
-    'index'
-  ].forEach build_cache
+  pkgs.forEach build_cache
 
-task 'build:baeword', 'Build baeword.cache to cache', ->
-  build_cache 'baeword'
-
-task 'build:xmlcms', 'Build xmlcms.cache to cache', ->
-  build_cache 'xmlcms'
-
-task 'build:menuwiz', 'Build menuwiz.cache to cache', ->
-  build_cache 'menuwiz'
-
-task 'build:sidebar', 'Build sidebar.cache to cache', ->
-  build_cache 'nav-sidebar'
-
-task 'build:drvasst', 'Build sidebar.cache to cache', ->
-  build_cache 'driver-asst'
-
-task 'build:index', 'Build index.cache to cache', ->
-  build_cache 'index'
+pkgs.forEach (pkg) ->
+  task 'build:' + pkg, "Build #{pkg}.cache to cache", ->
+    build_cache pkg
 
 task 'build:one', 'Build root.cache to root', ->
   build_cache 'root'
