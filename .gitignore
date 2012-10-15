@@ -1,6 +1,6 @@
 # only allowed xmlcms sub dir
-*
-!/xmlcms/
+/*
+!/xmlcms
 
 # os
 *.DS_Store
