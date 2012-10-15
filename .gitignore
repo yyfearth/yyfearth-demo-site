@@ -1,6 +1,6 @@
 # only allowed river-asst sub dir
-*
-!/driver-asst/
+/*
+!/driver-asst
 
 # os
 *.DS_Store
