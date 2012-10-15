@@ -1,6 +1,6 @@
 # only allowed menuwiz sub dir
-*
-!/menuwiz/
+/*
+!/menuwiz
 
 # os
 *.DS_Store
