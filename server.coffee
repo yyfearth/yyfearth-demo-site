@@ -34,6 +34,7 @@ fs = require 'fs'
 path = require 'path'
 http = require 'http'
 url = require 'url'
+zlib = require 'zlib'
 
 class FileServer
 
@@ -150,8 +151,6 @@ class FileServer
   routing: (req, res) ->
     return unless @chkUA req, res
 
-    return unless @_chk_gz req, res
-
     # console.log 'routing', req.url
     _url = url.parse req.url
     _file = _url.pathname
@@ -201,14 +200,6 @@ class FileServer
   MAX_AGE: 30 * 24 * 60 * 60 * 1000 # 30 days
   MIN_AGE: 60 * 1000 # 1 min
 
-  _chk_gz: (req, res) ->
-    unless /\bgzip\b/.test req.headers['accept-encoding']
-      console.log 'gzip unsupported for the client'
-      res.writeHead 406, 'Not Acceptable'
-      res.end 'the client does not support gziped content (accept-encoding header).'
-      false
-    else true
-  # end of check gz support
   _chk_mod: (url, file, req, res) ->
     _lastmod = req.headers['if-modified-since']
     _etag = req.headers['if-none-match']
@@ -231,24 +222,46 @@ class FileServer
 
     return unless @_chk_mod url, _file, req, res
 
-    console.log '200 serve file:', file # , 'caching:', caching
+    # check gzip and serve file data
+    _accept_gz = /\bgzip\b/.test req.headers['accept-encoding']
+    if _file.gz and not _accept_gz
+      console.log 'gzip unsupported for the client'
+      if _file._data?
+        @_serve_data res, _file, caching, _accept_gz, _file._data
+      else zlib.gunzip _file.data, (err, _data) =>
+        if err
+          console.log 'unzip failed', _file.filename
+          res.writeHead 406, 'Not Acceptable'
+          res.end 'unzip failed, and the client does not support gziped content (accept-encoding header).'
+        else
+          _file._data = _data
+          @_serve_data res, _file, caching, _accept_gz, _file._data
+        return
+      # end of gunzip and if has _data
+    else
+      @_serve_data res, _file, caching, _accept_gz, _file.data
+    # end of if gz and accept gz
+    return
+  # end of serve file
+  _serve_data: (res, file, caching, accept_gz, data) ->
+    console.log '200 serve file:', file.filename # , 'caching:', caching
 
-    _expires = if caching then _file.mtime + @MAX_AGE else new Date().getTime() + @MIN_AGE
+    _expires = if caching then file.mtime + @MAX_AGE else new Date().getTime() + @MIN_AGE
     _caching = if caching then @MAX_AGE else @MIN_AGE
 
     # for IE6 do not use 'Cache-Control: no-cache'
-    res.setHeader 'Content-Type', _file.mime
-    res.setHeader 'Content-Encoding', 'gzip' if _file.gz
+    res.setHeader 'Content-Type', file.mime
     res.setHeader 'Vary', 'Accept-Encoding'
-    res.setHeader 'Content-Length', _file.data.length
-    res.setHeader 'Last-Modified', _file._mtime.toUTCString()
-    res.setHeader 'Date', new Date().toUTCString()
+    res.setHeader 'Last-Modified', file._mtime.toUTCString()
     res.setHeader 'Expires', new Date(_expires).toUTCString()
-    res.setHeader 'Cache-Control', 'public, max-age=' + (_caching / 1000) | 0
-    res.setHeader 'ETag', _file._etag
-    res.end _file.data, 'binary'
+    res.setHeader 'Cache-Control', 'public, max-age=' + ((_caching / 1000) | 0)
+    res.setHeader 'ETag', file._etag
+    # res.setHeader 'Date', new Date().toUTCString() # auto
+    res.setHeader 'Content-Encoding', 'gzip' if accept_gz and file.gz
+    res.setHeader 'Content-Length', data.length
+    res.end data, 'binary'
 
     return
-  # end of serve file
+  # end of serve file data
 
 svr = FileServer.create()
