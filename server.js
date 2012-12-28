@@ -219,19 +219,7 @@
     };
 
     FileServer.prototype.chkUA = function(req, res) {
-      var msg, ua;
-      ua = req.headers['user-agent'];
-      if (/MSIE [1-9]\./i.test(ua)) {
-        msg = 'This WebApp does not support IE below 10!';
-      } else if (/opera/i.test(ua)) {
-        msg = 'This WebApp does not support Opera!';
-      } else if (/^Mozilla\/4/i.test(ua)) {
-        msg = 'This WebApp does not support your browser! \nIt seems your browser is out of date.';
-      } else {
-        return true;
-      }
-      res.end(msg);
-      return false;
+      return true;
     };
 
     FileServer.prototype.MAX_AGE = 30 * 24 * 60 * 60 * 1000;

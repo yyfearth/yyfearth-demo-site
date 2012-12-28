@@ -182,19 +182,19 @@ class FileServer
     return
   # end of routing
 
-  chkUA: (req, res) ->
-    ua = req.headers['user-agent']
-    if /MSIE [1-9]\./i.test ua
-      msg = 'This WebApp does not support IE below 10!'
-    else if /opera/i.test ua
-      msg = 'This WebApp does not support Opera!'
-    else if /^Mozilla\/4/i.test ua
-      msg = 'This WebApp does not support your browser! \nIt seems your browser is out of date.'
-    else
-      return true
-    # res.writeHead 200, 'Content-Type': 'text/plain'
-    res.end msg
-    return false
+  chkUA: (req, res) -> true
+    # ua = req.headers['user-agent']
+    # if /MSIE [1-9]\./i.test ua
+    #   msg = 'This WebApp does not support IE below 10!'
+    # else if /opera/i.test ua
+    #   msg = 'This WebApp does not support Opera!'
+    # else if /^Mozilla\/4/i.test ua
+    #   msg = 'This WebApp does not support your browser! \nIt seems your browser is out of date.'
+    # else
+    #   return true
+    # # res.writeHead 200, 'Content-Type': 'text/plain'
+    # res.end msg
+    # return false
   # end of check ua
 
   MAX_AGE: 30 * 24 * 60 * 60 * 1000 # 30 days
