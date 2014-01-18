@@ -1,0 +1,11 @@
+# only allowed marxo sub dir
+*.*
+!/marxo/**
+
+# os
+*.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db 
+Desktop.ini
