@@ -4,8 +4,8 @@
 	"domains": [
 		"demo.yyfearth.com",
 		"apps.yyfearth.com",
-		"demo.myyapps.com",
-		"apps.myyapps.com"
+		"demo.wilsonyoung.me",
+		"demo.wilsonstart.com"
 	],
 	"description": "static apps demo site of yyfearth.com",
 	"keywords": [
@@ -13,7 +13,7 @@
 		"apps",
 		"demo"
 	],
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"author": "Wilson Young <yyfearth@gmail.com>",
 	"scripts": {
 		"start": "node server.js",
@@ -21,6 +21,6 @@
 	},
 	"main": "server.js",
 	"engines": {
-		"node": "0.6.x || 0.8.x"
+		"node": "0.6.x || 0.8.x || 0.10.x"
 	}
 }

@@ -18,6 +18,7 @@ build_cache = (name) ->
         console.log name, 'cached'
 
 pkgs = [
+  'marxo'
   'baeword'
   'xmlcms'
   'menuwiz'

@@ -8,8 +8,13 @@ CACHE =
     root: '/'
     package: 'index.cache'
   ,
+    root: '/marxo/'
+    package: 'marxo.cache'
+    # lazyload: on
+  ,
     root: '/menuwiz/'
     package: 'menuwiz.cache'
+    # lazyload: on
   ,
     root: '/baeword/'
     package: 'baeword.cache'
@@ -85,20 +90,20 @@ class FileServer
     pad_char = 0
     head_len++ while buf[head_len]
     head = buf.toString 'utf-8', 1, head_len
-    throw 'read package error: format padding mismatch' unless buf[0] is buf[buf.length - 1] is pad_char
+    throw new Error 'read package error: format padding mismatch' unless buf[0] is buf[buf.length - 1] is pad_char
     try
       head = JSON.parse head
-    catch e
-      throw 'cannot parse package'
-    throw 'unacceptable package version ' + head.v unless head.v is 2
+    catch
+      throw new Error 'cannot parse package'
+    throw new Error 'unacceptable package version ' + head.v unless head.v is 2
     offset = head_len + pad_len
     # test padding
-    throw 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
+    throw new Error 'read package error: head padding mismatch' if buf[offset - 1] isnt pad_char
     # load content
     _get_data = (file) ->
       file.offset += offset
       end = file.offset + file.length
-      throw 'read package error: padding mismatch' if buf[end] isnt pad_char
+      throw new Error 'read package error: padding mismatch' if buf[end] isnt pad_char
       file.data = buf.slice file.offset, end
       delete file.offset
       return
@@ -125,7 +130,7 @@ class FileServer
 
   load: (callback) ->
     @_load_caches (err, cache) =>
-      throw err if err
+      throw new Error err if err
       console.log 'init cache loaded'
       callback()
       return
@@ -215,7 +220,7 @@ class FileServer
     console.log 'req:', req.connection.remoteAddress, req.url
 
     unless _file = @cache[file]
-      throw 'failed to find the file ' + file
+      throw new Error 'failed to find the file ' + file
 
     _file._mtime ?= new Date _file.mtime
     _file._etag ?= "\"#{_file.size}-#{_file.mtime}\""
