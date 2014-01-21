@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<title>Application Index</title>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+	<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 	<style type="text/css">
 		body {
 			margin: 15px;
@@ -24,9 +24,8 @@
 			width: 300px;
 			height: 200px;
 			text-align: center;
-			font-family: Arial,sans-serif;
+			font-family: Arial, sans-serif;
 			font-size: 50px;
-			line-height: 200px;
 			background-color: #fff;
 			border: 0;
 		}
@@ -102,71 +101,75 @@
 	</style>
 </head>
 <body>
-	<div id="header"><h1>Application Index</h1></div>
-	<div id="list">
-	<ul>
-		<li><a name="thumb" href="baeword" title="baeword">
-			<img src="images/baeword.png" alt="baeword" />
-			<span class="title">baeword</span></a></li>
-		<li><a name="thumb" href="menuwiz" title="MenuWiz (Demo)">
-			<img src="images/menuwiz.png" alt="MenuWiz (Demo)" />
-			<span class="title">MenuWiz (Demo)</span></a></li>
-		<li><a name="thumb" href="driver-asst" title="Driver-Assistant (Demo)">
-			<img src="images/driver-asst.png" alt="Driver-Assistant (Demo)" />
-			<span class="title">Driver-Assistant (Demo)</span></a></li>
-		<li><a name="thumb" href="xmlcms" title="XmlCMS (Demo)">
-			<img src="images/xmlcms.png" alt="XmlCMS" />
-			<span class="title">XmlCMS (Demo)</span></a></li>
-		<li><a name="thumb" href="nav-sidebar" title="Nav-Sidebar (Demo)">
-			<img src="images/nav-sidebar.png" alt="Nav-Sidebar (Demo)" />
-			<span class="title">Nav-Sidebar (Demo)</span></a></li>
-		<li><a name="thumb" href="controls/combo-box.html" title="Combo-Box (Demo)">
-			<img src="images/combo-box.png" alt="Combo-Box (Demo)" />
-			<span class="title">Combo-Box (Demo)</span></a></li>
-		<li><a name="thumb" href="controls/y-js-cal.html" title="Y-JS-Cal (Demo)">
-			<img src="images/y-js-cal.png" alt="Y-JS-Cal (Demo)" />
-			<span class="title">Y-JS-Cal (Demo)</span></a></li>
-	</ul>
-	</div>
-	<script type="text/javascript">
-		(function(){ // must below all imgs
-		 var delay, 
-			thumbs = document.getElementsByName('thumb'),
-			imgs = document.getElementsByTagName('img');
-			for (var i = 0; i < imgs.length; i++) {
-				var img = imgs[i];
-				img.onload = function () {
-					this.className = 'loaded';
-				};
-				img.onerror = function () {
-					var div_img = document.createElement('div');
-					div_img.className = 'img';
-					div_img.innerText = this.alt;
-					this.parentNode.replaceChild(div_img, this);
-				 };
-			}
-			for (var i = 0; i < thumbs.length; i++) {
-				var thumb = thumbs[i];
-				thumb.onmouseover = function () {
-					var thisp = this;
-					delay = setTimeout(function(){
-						thisp.focus();
-						delay = null;
-					}, 1000);
-				};
-				thumb.onmouseout = function () {
-					delay = delay && clearTimeout(delay);
-				};
-			}
-			// init
-			document.body.className = 'loaded';
-			thumbs[0].focus();
-		})()
-	</script>
-	<div id="foot">
-		Google Chrome 16+, Safari 5+, Firefox 5+ and Opera 11+ are strongly recommended for this site.
-		<span style="float:right">-- yyfearth.com apps demo site</span>
-	</div>
+<div id="header"><h1>Application Index</h1></div>
+<ul id="list">
+	<li><a name="thumb" href="marxo" title="Marxo Socal Marketing System Console (Demo)">
+		<img src="images/marxo.png" alt="Marxo Console (Demo)"/>
+		<span class="title">Marxo Console (Demo)</span></a></li>
+	<li><a name="thumb" href="http://madtalk.yyfearth.com/" title="MadTalk Chat Room">
+		<img src="images/madtalk.png" alt="MadTalk"/>
+		<span class="title">MadTalk</span></a></li>
+	<li><a name="thumb" href="menuwiz" title="MenuWiz (Demo)">
+		<img src="images/menuwiz.png" alt="MenuWiz (Demo)"/>
+		<span class="title">MenuWiz (Demo)</span></a></li>
+	<li><a name="thumb" href="driver-asst" title="Driver-Assistant (Demo)">
+		<img src="images/driver-asst.png" alt="Driver-Assistant (Demo)"/>
+		<span class="title">Driver-Assistant (Demo)</span></a></li>
+	<li><a name="thumb" href="baeword" title="baeword">
+		<img src="images/baeword.png" alt="baeword"/>
+		<span class="title">baeword</span></a></li>
+	<li><a name="thumb" href="xmlcms" title="XmlCMS (Demo)">
+		<img src="images/xmlcms.png" alt="XmlCMS"/>
+		<span class="title">XmlCMS (Demo)</span></a></li>
+	<li><a name="thumb" href="nav-sidebar" title="Nav-Sidebar (Demo)">
+		<img src="images/nav-sidebar.png" alt="Nav-Sidebar (Demo)"/>
+		<span class="title">Nav-Sidebar (Demo)</span></a></li>
+	<li><a name="thumb" href="controls/combo-box.html" title="Combo-Box (Demo)">
+		<img src="images/combo-box.png" alt="Combo-Box (Demo)"/>
+		<span class="title">Combo-Box (Demo)</span></a></li>
+	<li><a name="thumb" href="controls/y-js-cal.html" title="Y-JS-Cal (Demo)">
+		<img src="images/y-js-cal.png" alt="Y-JS-Cal (Demo)"/>
+		<span class="title">Y-JS-Cal (Demo)</span></a></li>
+</ul>
+<div id="footer">
+	Google Chrome 28+, Safari 5+, Firefox 10+ and Opera 16+ are strongly recommended for this site.
+	<span style="float:right">-- yyfearth.com apps demo site</span>
+</div>
+<script type="text/javascript">
+	(function () { // must below all imgs
+		var delay, i, l,
+				thumbs = document.getElementsByName('thumb'),
+				imgs = document.getElementsByTagName('img');
+		for (i = 0, l = imgs.length; i < l; i++) {
+			var img = imgs[i];
+			img.onload = function () {
+				this.className = 'loaded';
+			};
+			img.onerror = function () {
+				var div_img = document.createElement('div');
+				div_img.className = 'img';
+				div_img.innerText = this.alt;
+				this.parentNode.replaceChild(div_img, this);
+			};
+		}
+		for (i = 0, l = thumbs.length; i < l; i++) {
+			var thumb = thumbs[i];
+			thumb.onmouseover = function () {
+				var thisp = this;
+				delay = setTimeout(function () {
+					thisp.focus();
+					delay = null;
+				}, 1000);
+			};
+			thumb.onmouseout = function () {
+				delay = delay && clearTimeout(delay);
+			};
+		}
+		// init
+		document.body.className = 'loaded';
+		thumbs[0].focus();
+	})()
+</script>
 </body>
 </html>
-<!-- 2012-08-06 00:44:15 -->
+<!-- 2014-01-20 22:53:12 -->
