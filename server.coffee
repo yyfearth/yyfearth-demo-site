@@ -10,27 +10,27 @@ CACHE =
   ,
     root: '/marxo/'
     package: 'marxo.cache'
-    # lazyload: on
+    lazyload: on
   ,
     root: '/menuwiz/'
     package: 'menuwiz.cache'
-    # lazyload: on
+    lazyload: on
   ,
     root: '/baeword/'
     package: 'baeword.cache'
-    # lazyload: on
+    lazyload: on
   ,
     root: '/xmlcms/'
     package: 'xmlcms.cache'
-    # lazyload: on
+    lazyload: on
   ,
     root: '/nav-sidebar/'
     package: 'nav-sidebar.cache'
-    # lazyload: on
+    lazyload: on
   ,
     root: '/driver-asst/'
     package: 'driver-asst.cache'
-    # lazyload: on
+    lazyload: on
   ]
 
 #CACHE = packages: [{ root: '/', package: 'root.cache' }]
@@ -54,24 +54,59 @@ class FileServer
       return
   # end of constructor
 
-  _load_caches: (callback) -> # run once
-    _cache = @cache = {}
+  _load_caches: (lazy = true, callback) -> # run once
+    _cache = @cache = _lazyload: {}
     _count = CACHE.packages.length
+    _lazy = _cache._lazyload
     CACHE.packages.forEach (cache) =>
-
-      @_load_cache_pkg cache, (err) ->
+      throw new Error 'cache must have root' unless cache.root
+      if lazy and cache.lazyload and cache.root isnt '/'
+        _cache[cache.root[0...-1]] = "301:#{cache.root}"
+        _lazy[cache.root] = cache
+        --_count
+      else @_load_cache_pkg cache, (err) ->
         if err
           console.log 'err', err
           callback err
         else unless --_count
           callback null, _cache
         return
+      return
+    _cache._lazy_regex = new RegExp '^' + Object.keys(_lazy).join '|^'
+    # console.log 'regex', _cache._lazy_regex
+    return
+
+  _lazyload: (path, req, res) ->
+    _cache = @cache
+    _lazy = _cache._lazyload
+    _root = _cache._lazy_regex and path.match(_cache._lazy_regex)?[0]
+    if _root
+      cache = _lazy[_root]
+      console.log 'lazyload cache', cache.package, 'for', _root
+      # remove loaded and regen regex
+      delete _lazy[_root]
+      _keys = Object.keys(_lazy)
+      if _keys.length
+        _cache._lazy_regex = new RegExp '^' + _keys.join '|^'
+      else
+        @_lazyload = @_not_found.bind @
+        delete _cache._lazy_regex
+      # start to load
+      @_load_cache_pkg cache, (err) =>
+        if err
+          console.log 'err', err
+          res.writeHead 500, 'Internal Server Error'
+          res.end '500 internal server error: faild to load package file'
+        else
+          @routing req, res
+        return
+    else @_not_found path, req, res
     return
 
   _load_cache_pkg: (cache, callback) ->
     _cache = @cache
     _pkg = path.join __dirname, CACHE.base, cache.package
-    # ignored lazyload for now
+
     fs.readFile _pkg, 'binary', (err, data) =>
       return callback err if err
 
@@ -140,8 +175,14 @@ class FileServer
     files
   # end of load cache package
 
-  load: (callback) ->
-    @_load_caches (err, cache) =>
+  _not_found: (path, req, res = req) ->
+    console.log '404 not found', path
+    res.writeHead 404, 'Not Found'
+    res.end '404 resource not found'
+    return
+
+  load: (callback, full) ->
+    @_load_caches not full, (err, cache) =>
       throw new Error err if err
       console.log 'init cache loaded'
       callback()
@@ -160,6 +201,24 @@ class FileServer
         @load ->
           console.log 'reloaded'
           res.end 'reloaded'
+      when 'full-reload'
+        @load ->
+          console.log 'full reloaded'
+          res.end 'full reloaded'
+        , true
+      when 'full-load'
+        _count = 0
+        for own ignored, cache of @cache._lazyload
+          ++_count
+          @_load_cache_pkg cache, (err) =>
+            if err
+              console.log 'err', err
+              res.end 'faild to load package file'
+              _count = 0
+            else unless --_count
+              console.log 'all loaded'
+              res.end 'all loaded'
+            return
       else
         res.writeHead 501, 'Not Implemented'
         res.end "501 cmd '#{cmd}' not implemented"
@@ -193,8 +252,7 @@ class FileServer
         _cached = @cache[_file = _cached]
     # link solved
     unless _cached # not found
-      res.writeHead 404, 'Not Found'
-      res.end '404 resource not found'
+      @_lazyload _file, req, res
     else # static files
       # console.log 'routing file', req.url, file
       @serve { url: _url.href, file: _file, caching: on, req, res }
