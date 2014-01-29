@@ -57,31 +57,43 @@ class FileServer
   _load_caches: (callback) -> # run once
     _cache = @cache = {}
     _count = CACHE.packages.length
-    _callback = (err) ->
-      if err
-        console.log 'err', err
-        callback err
-      else unless --_count
-        callback null, _cache
-      return
     CACHE.packages.forEach (cache) =>
-      _pkg = path.join __dirname, CACHE.base, cache.package
-      # ignored lazyload for now
-      fs.readFile _pkg, 'binary', (err, data) =>
-        return _callback err if err
 
-        _files = @_load_cache new Buffer data, 'binary'
-
-        for filename in Object.getOwnPropertyNames _files
-          _path = cache.root + filename
-          _file = _cache[_path] = _files[filename]
-          _file.path = _path
-          _file.filename = path.basename _path
-
-        console.log 'cache', cache.package, 'loaded'
-        _callback null
+      @_load_cache_pkg cache, (err) ->
+        if err
+          console.log 'err', err
+          callback err
+        else unless --_count
+          callback null, _cache
         return
-      # end of read file
+    return
+
+  _load_cache_pkg: (cache, callback) ->
+    _cache = @cache
+    _pkg = path.join __dirname, CACHE.base, cache.package
+    # ignored lazyload for now
+    fs.readFile _pkg, 'binary', (err, data) =>
+      return callback err if err
+
+      _files = @_load_cache new Buffer data, 'binary'
+
+      for filename in Object.getOwnPropertyNames _files
+        _path = cache.root + filename
+        _file = _cache[_path] = _files[filename]
+        _file.path = _path
+        _filename = _file.filename = path.basename _path
+        if /^index\.html?$/i.test _filename
+          _dirname = path.dirname _path
+          if _dirname is '/'
+            _cache['/'] = "/#{_filename}"
+          else
+            _cache[_dirname] = "301:#{_dirname}/"
+            _cache[_dirname + '/'] = "#{_dirname}/#{_filename}"
+
+      console.log 'cache', cache.package, 'loaded'
+      callback null
+      return
+    # end of read file
     return
 
   _load_cache: (buf) ->
@@ -154,7 +166,7 @@ class FileServer
     return
 
   routing: (req, res) ->
-    return unless @chkUA req, res
+    # return unless @chkUA req, res
 
     # console.log 'routing', req.url
     _url = url.parse req.url
@@ -164,42 +176,45 @@ class FileServer
       cmd = _file[3..]
       @cmd cmd, req, res
       return
-    
-    # add ending / for 1st level dir
-    if /^\/[\w\-]+$/.test _file
-      res.writeHead 301, 'Location': _file + '/'
-      res.end()
-      return
-    # TODO: deal with sub dir without ending /
-    # looking for index.html in cache
 
-    _file += 'index.html' if _file[-1..] is '/' # index page
-
-    # cached files
-    if @cache[_file]
-      # static files
-      # console.log 'routing file', req.url, file
-      @serve { url: _url.href, file: _file, caching: on, req, res }
-    else
+    # cached files or links
+    _cached = @cache[_file]
+    # solve link to file
+    while typeof _cached is 'string'
+      if /^30[1237]:/.test _cached # redirect
+        _code = _cached[0...3]
+        _cached = _cached[4..]
+        console.log 'redirect', _code, _file, '->', _cached
+        res.writeHead _code, 'Location': _cached
+        res.end()
+        return
+      else # rewrite
+        console.log 'rewrite', _file, '->', _cached
+        _cached = @cache[_file = _cached]
+    # link solved
+    unless _cached # not found
       res.writeHead 404, 'Not Found'
       res.end '404 resource not found'
-    
+    else # static files
+      # console.log 'routing file', req.url, file
+      @serve { url: _url.href, file: _file, caching: on, req, res }
+
     return
   # end of routing
 
-  chkUA: (req, res) -> true
-    # ua = req.headers['user-agent']
-    # if /MSIE [1-9]\./i.test ua
-    #   msg = 'This WebApp does not support IE below 10!'
-    # else if /opera/i.test ua
-    #   msg = 'This WebApp does not support Opera!'
-    # else if /^Mozilla\/4/i.test ua
-    #   msg = 'This WebApp does not support your browser! \nIt seems your browser is out of date.'
-    # else
-    #   return true
-    # # res.writeHead 200, 'Content-Type': 'text/plain'
-    # res.end msg
-    # return false
+  # chkUA: (req, res) ->
+  #   ua = req.headers['user-agent']
+  #   if /MSIE [1-9]\./i.test ua
+  #     msg = 'This WebApp does not support IE below 10!'
+  #   else if /opera/i.test ua
+  #     msg = 'This WebApp does not support Opera!'
+  #   else if /^Mozilla\/4/i.test ua
+  #     msg = 'This WebApp does not support your browser! \nIt seems your browser is out of date.'
+  #   else
+  #     return true
+  #   # res.writeHead 200, 'Content-Type': 'text/plain'
+  #   res.end msg
+  #   return false
   # end of check ua
 
   MAX_AGE: 30 * 24 * 60 * 60 * 1000 # 30 days
@@ -228,6 +243,7 @@ class FileServer
     return unless @_chk_mod url, _file, req, res
 
     # check gzip and serve file data
+    caching = false if _file.caching is false
     _accept_gz = /\bgzip\b/.test req.headers['accept-encoding']
     if _file.gz and not _accept_gz
       console.log 'gzip unsupported for the client'
