@@ -1,5 +1,10 @@
 # server.coffee
 
+# require('nodetime').profile
+#   accountKey: 'fb559519c42432efc320a5c7dfcf0135ab880eed'
+#   appName: 'yyfearth-demo-site'
+
+IP = null
 PORT = 8080
 
 CACHE =
@@ -45,7 +50,7 @@ class FileServer
 
   @create: (ip, port) -> new @ ip, port
 
-  constructor: (@ip, @port = PORT) ->
+  constructor: (@ip = IP, @port = PORT) ->
     @svr = http.createServer @routing.bind @
     # load static files
     @load =>
@@ -126,6 +131,7 @@ class FileServer
             _cache[_dirname + '/'] = "#{_dirname}/#{_filename}"
 
       console.log 'cache', cache.package, 'loaded'
+      gc?()
       callback null
       return
     # end of read file
