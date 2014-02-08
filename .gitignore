@@ -1,5 +1,6 @@
 # project
 *.cache
+dist/
 
 # node.js
 lib-cov
