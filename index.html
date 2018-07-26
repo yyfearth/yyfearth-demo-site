@@ -140,6 +140,11 @@
 		var delay, i, l,
 				thumbs = document.getElementsByName('thumb'),
 				imgs = document.getElementsByTagName('img');
+		window.onload = function () {
+			for (i = 0, l = imgs.length; i < l; i++) {
+				imgs[i].className = 'loaded';
+			}
+		}
 		for (i = 0, l = imgs.length; i < l; i++) {
 			var img = imgs[i];
 			img.onload = function () {
